@@ -1,7 +1,6 @@
 #ifndef _DOT_BUILTINS
 #define _DOT_BUILTINS
 
-#include "dot-defs.h"
 #include "dot-object.h"
 
 #include <iostream>
@@ -22,10 +21,10 @@ namespace builtins {
 // --------------Global Functions-------------------------------------
 
 // print.arg
+// TODO: this won't print strings properly
 Object *print(Object *self, Object *arg) {
 	switch (arg->get_type()) {
 		case object_type::integer: std::cout << arg->as_integer().ok(); break;
-		case object_type::string: std::cout << arg->as_string().ok(); break;
 		case object_type::function: std::cout << "<function>"; break;
 		case object_type::null: std::cout << "<null>"; break;
 		case object_type::array: std::cout << "<array>"; break;
@@ -55,15 +54,11 @@ Object *add(Object *self, Object *arg) {
 	return self;
 }
 
-// --------------String Functions-------------------------------------
-
-Object *strlen(Object *self, Object *arg) {
-	
-}
-
 // --------------Array Functions--------------------------------------
 
-
+Object *get(Object *self, Object *arg) {
+	
+}
 
 }
 }

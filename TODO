@@ -24,6 +24,10 @@
 	- [ ] figure out how editing already-set functions will work
 	- [ ] static functions - functions with no owner
 	- [ ] math functions - MathSin.x? MathCos.x? or Math.Sin.x? Math.Cos.x?
+	- [ ] control flow
+		- [ ] if
+		- [ ] while
+		- [ ] repeat
 - [ ] argument ($) at the top level should be argv
 - [ ] delete function? - finalize = { delete.(@.set) }, would prevent modification
 - [ ] exists function? - check if variable exists

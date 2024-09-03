@@ -9,7 +9,6 @@ namespace dot {
 	class Object;
 
 	using integer_type = int;
-	using string_type = std::string;
 	// return value: object
 	// first object: self or a null object
 	// second object: argument to function or a null object
@@ -19,7 +18,6 @@ namespace dot {
 	enum object_type {
 		null,
 		integer,
-		string,
 		function,
 		array
 	};

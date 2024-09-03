@@ -124,9 +124,9 @@ namespace ast {
 	// string literal
 	struct StringLiteral : public Node {
 
-		const string_type string;
+		const std::string string;
 
-		StringLiteral(const string_type &string): string(string) {}
+		StringLiteral(const std::string &string): string(string) {}
 
 		void print(const size_t &depth) const override {
 			std::cout << std::string(depth, '\t') << "String Literal: " << string << std::endl;
