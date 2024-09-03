@@ -1,0 +1,11 @@
+
+q.set.{
+	a.add.2
+	return.a
+}
+a.set.(10.add.5)
+(a.b).set."Hello"
+array.set.[a, 10, "String!", [5, 20]]
+b.set.({
+	return.($.mul.2)
+}.a)

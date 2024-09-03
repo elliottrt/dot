@@ -1,0 +1,43 @@
+
+// Basic
+- [x] basic object structure
+- [x] errors and results
+
+// AST
+- [x] tree generation from text
+- [x] separate tokenizing/lexing and AST-gen
+- [x] error reporting
+- [x] arrays
+- [x] @ for self and $ for argument
+
+// Code Evaluation
+- [x] declaration of variables -> `a.set.10` makes a=10, `a.b.set.20` makes a.b=20 (b is member of a)
+	- [ ] there could be a global null that hold all variables in it, maybe functions could have their own for scopes
+- [x] function calls
+	- [ ] function scope
+- [ ] ability to initialize variables to null
+- [ ] builtin functions - when possible, should be member functions of variables - will allow for polymorphism
+	- [ ] input/output
+	- [ ] equality
+	- [ ] array resize, fill, get element, set element
+	- [ ] general set method
+	- [ ] figure out how editing already-set functions will work
+	- [ ] static functions - functions with no owner
+	- [ ] math functions - MathSin.x? MathCos.x? or Math.Sin.x? Math.Cos.x?
+- [ ] argument ($) at the top level should be argv
+- [ ] delete function? - finalize = { delete.(@.set) }, would prevent modification
+- [ ] exists function? - check if variable exists
+- [ ] evaluate tree
+	- [ ] lazy evaluation after simplifying
+
+// Other
+- [ ] static typing/inferring - interfaces?
+- [ ] testing
+- [ ] ability to include files
+- [ ] standard library
+- [ ] garbage collection of unused objects
+- [ ] reporting of multiple errors
+- [ ] string could be represented as list of integer
+- [ ] simplify ast tree
+	- [ ] simplify should identify constants		 ex: (10.add.5) -> 15
+- [ ] array elements separated by .?
