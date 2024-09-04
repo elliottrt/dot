@@ -6,6 +6,8 @@
 
 #include "dot-object.h"
 #include "dot-alloc.h"
+#include "dot-result.h"
+#include "dot-error.h"
 
 #include "token.h"
 
@@ -20,7 +22,7 @@ namespace ast {
 		void print() const { print(0); }
 		virtual void print(const size_t &depth) const = 0;
 
-		virtual Object *eval(Object *parent) const = 0;
+		virtual result::Result<ObjectRef, error::RuntimeError *> eval(ObjectRef parent) const = 0;
 	};
 
 	struct None : public Node {
@@ -54,7 +56,7 @@ namespace ast {
 				child->print(depth + 1);
 		}
 
-		Object *eval(Object *parent) const override;
+		result::Result<ObjectRef, error::RuntimeError *> eval(ObjectRef parent) const override;
 	};
 
 	// array literal
@@ -68,7 +70,7 @@ namespace ast {
 				child->print(depth + 1);
 		}
 
-		Object *eval(Object *parent) const override;
+		result::Result<ObjectRef, error::RuntimeError *> eval(ObjectRef parent) const override;
 	};
 
 	// (a).(b)
@@ -90,7 +92,7 @@ namespace ast {
 			argument->print(depth + 1);
 		}
 
-		Object *eval(Object *parent) const override;
+		result::Result<ObjectRef, error::RuntimeError *> eval(ObjectRef parent) const override;
 	};
 
 	// name of variable or function
@@ -104,7 +106,7 @@ namespace ast {
 			std::cout << std::string(depth, '\t') << "Identifier: " << tag << std::endl;
 		}
 
-		Object *eval(Object *parent) const override;
+		result::Result<ObjectRef, error::RuntimeError *> eval(ObjectRef parent) const override;
 	};
 
 	// integer literal
@@ -118,7 +120,7 @@ namespace ast {
 			std::cout << std::string(depth, '\t') << "Integer Literal: " << integer << std::endl;
 		}
 
-		Object *eval(Object *parent) const override;
+		result::Result<ObjectRef, error::RuntimeError *> eval(ObjectRef parent) const override;
 	};
 
 	// string literal
@@ -132,7 +134,7 @@ namespace ast {
 			std::cout << std::string(depth, '\t') << "String Literal: " << string << std::endl;
 		}
 
-		Object *eval(Object *parent) const override;
+		result::Result<ObjectRef, error::RuntimeError *> eval(ObjectRef parent) const override;
 	};
 
 	result::Result<Node *, error::SyntaxError> generate_tree(const std::vector<token::token> &tokens);

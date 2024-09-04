@@ -14,13 +14,19 @@ namespace error {
 			: std::runtime_error(what) {}
 	};
 
-	class TypeError : Error {
+	class RuntimeError : Error {
 	public:
-		dot::object_type expected;
-		dot::object_type received;
+		RuntimeError(const std::string &what)
+			: Error(what) {}
+	};
 
-		TypeError(const dot::object_type &expected, const dot::object_type &received)
-			: Error("type error"), expected(expected), received(received) {}
+	class TypeError : RuntimeError {
+	public:
+		object_type expected;
+		object_type received;
+
+		TypeError(const object_type &expected, const object_type &received)
+			: RuntimeError("type error"), expected(expected), received(received) {}
 		TypeError(const TypeError &other): TypeError(other.expected, other.received) {}
 		TypeError &operator=(const TypeError &other) {
 			expected = other.expected;
@@ -29,12 +35,12 @@ namespace error {
 		}
 	};
 
-	class NoSuchObjectError : Error {
+	class NoSuchObjectError : RuntimeError {
 	public:
 		std::string name;
 
 		NoSuchObjectError(const std::string &name)
-			: Error("no such object error"), name(name) {}
+			: RuntimeError("no such object error"), name(name) {}
 		NoSuchObjectError(const NoSuchObjectError &other): NoSuchObjectError(other.name) {}
 		NoSuchObjectError &operator=(const NoSuchObjectError &other) {
 			name = other.name;

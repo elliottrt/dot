@@ -9,47 +9,23 @@ namespace dot {
 
 	class ObjectAllocator {
 
-		static Object *global_null;
-		static std::unordered_map<Object *, size_t> objects;
+		static ObjectRef global_null;
 
 	public:
 
-		static void gc();
+		static ObjectRef create(ObjectRef parent, const std::string &name);
+		static ObjectRef create(ObjectRef parent, const std::string &name, const integer_type &value);
+		static ObjectRef create(ObjectRef parent, const std::string &name, const std::string &value);
+		static ObjectRef create(ObjectRef parent, const std::string &name, const array_type &value);
+		static ObjectRef create(ObjectRef parent, const std::string &name, const function_type &value);
 
-		static void display() {
-			for (const auto &pair : objects)
-				std::cout << "\t" << pair.first->get_type() << " " << pair.second << std::endl;
-		}
+		static void set_tag(ObjectRef parent, const std::string &tag, ObjectRef object);
 
-		static void dec_ref(Object *obj) {
-			objects[obj] -= 1;
-		}
+		static result::Result<ObjectRef, error::NoSuchObjectError> get_tag(ObjectRef parent, const std::string &tag);
 
-		static void inc_ref(Object *obj) {
-			objects[obj] += 1;
-		}
+		static bool has_tag(ObjectRef parent, const std::string &tag);
 
-		template<typename T>
-		static Object *create(Object *parent, const std::string &name, const T &value) {
-			if (parent == nullptr)
-				parent = global_null;
-				
-			Object *new_object = new Object(value);
-			objects[new_object] = 1;
-
-			new_object->creator = parent;
-			set_tag(parent, name, new_object);
-
-			return new_object;
-		}
-
-		static Object *create(Object *parent, const std::string &name);
-
-		static void set_tag(Object *parent, const std::string &tag, Object *object);
-
-		static result::Result<Object *, error::NoSuchObjectError> get_tag(Object *parent, const std::string &tag);
-
-		static bool has_tag(Object *parent, const std::string &tag);
+		static void remove_tag(ObjectRef parent, const std::string &tag);
 
 	};
 

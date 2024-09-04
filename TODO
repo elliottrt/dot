@@ -12,7 +12,7 @@
 
 // Code Evaluation
 - [x] declaration of variables -> `a.set.10` makes a=10, `a.b.set.20` makes a.b=20 (b is member of a)
-	- [ ] there could be a global null that hold all variables in it, maybe functions could have their own for scopes
+	- [x] there could be a global null that hold all variables in it
 - [x] function calls
 	- [ ] function scope
 - [ ] ability to initialize variables to null
@@ -39,9 +39,9 @@
 - [ ] testing
 - [ ] ability to include files
 - [ ] standard library
-- [ ] garbage collection of unused objects
+- [x] garbage collection of unused objects
 - [ ] reporting of multiple errors
-- [ ] string could be represented as list of integer
+- [x] string could be represented as list of integer
 - [ ] simplify ast tree
 	- [ ] simplify should identify constants		 ex: (10.add.5) -> 15
 - [ ] array elements separated by .?

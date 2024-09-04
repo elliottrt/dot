@@ -3,20 +3,13 @@
 
 dot::Object::~Object() {
 	if (type == object_type::array) {
-		for (auto e : array)
-			dot::ObjectAllocator::dec_ref(e);
 		array.~array_type();
 	}
-		
-	for (const object_tags::value_type &child : tags)
-		dot::ObjectAllocator::dec_ref(child.second);
 }
 
-void dot::Object::set(const dot::Object *other) {
+void dot::Object::set(const dot::ObjectRef other) {
 	// clean up anything we're leaving behind
 	if (type == object_type::array) {
-		for (auto e : array)
-			dot::ObjectAllocator::dec_ref(e);
 		array.~array_type();
 	}
 

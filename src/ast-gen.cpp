@@ -137,8 +137,6 @@ dot::result::Result<dot::ast::Node *, dot::error::SyntaxError> generate_brackete
 	// function if front={, back=}, front matches back -> generate_tree() without front, back
 	// application if front=(, back=), front matches back -> generate_application() without front, back
 
-	// TODO: we are assuming that tokens.size() != 0, stop assuming and logic error instead
-
 	if (tokens.empty())
 		return dot::error::SyntaxError::LogicError(__FILE__, __LINE__);
 

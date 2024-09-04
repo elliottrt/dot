@@ -15,8 +15,6 @@ namespace dot {
 			array_type array;
 		};
 		object_tags tags;
-		// where this object was created
-		Object *creator;
 
 		// null object
 		Object(): type(object_type::null), integer(0) {}
@@ -33,14 +31,25 @@ namespace dot {
 
 		~Object();
 
-		void set(const Object *other);
+		std::string to_string() {
+			switch (type) {
+				case object_type::integer: return std::to_string(integer);
+				case object_type::array: {
+					array_type *array = as_array().ok();
+					std::string result;
+					for (auto e : *array)
+						result += e->to_string() + ", ";
+					return "[" + result.substr(0, result.size() - 2) + "]";
+				}
+				case object_type::function: return "<function>";
+				default: return "<null>";
+			}
+		}
+
+		void set(const ObjectRef other);
 
 		const object_type &get_type() {
 			return type;
-		}
-
-		Object *get_creator() {
-			return creator;
 		}
 	
 		result::Result<integer_type *, error::TypeError> as_integer() {

@@ -40,6 +40,7 @@ int main(int argc, char const *argv[]) {
 	// for (token &tok : tokens.ok())
 		// printf("%s:%lu:%lu: '%c' (%d): \"%s\"\n", "test.dot", tok.row, tok.col, (char) tok.type, (int) tok.type, tok.text.c_str());
 
+	// TODO: ast tree should use gc_ptr
 	Result<Node *, SyntaxError> ast_tree = generate_tree(tokens.ok());
 
 	// if ast generation encounters an error, display it and exit
@@ -50,14 +51,28 @@ int main(int argc, char const *argv[]) {
 	}
 
 	// print the full ast tree
-	ast_tree.ok()->Node::print();
+	// ast_tree.ok()->Node::print();
 
-	std::cout << "entering eval" << std::endl;
-	dot::Object *main = ast_tree.ok()->eval(nullptr);
-	std::cout << "exiting eval" << std::endl;
+	// TODO: make sure the gc_ptr is working
 
-	// self is null (global_null), arg is null (probably bad idea)
-	main->as_function().ok()->operator()(nullptr, nullptr);
+	auto main = ast_tree.ok()->eval(nullptr);
+
+	if (main.is_err()) {
+		const RuntimeError *error = main.err();
+		throw error;
+		return EXIT_FAILURE;
+	}
+
+	// arg is null (probably bad idea)
+	auto retval = main.ok()->as_function().ok()->operator()(nullptr);
+
+	if (retval.is_err()) {
+		const RuntimeError *error = retval.err();
+		throw error;
+		return EXIT_FAILURE;
+	}
+
+	std::cout << retval.ok()->to_string() << std::endl;
 
 	delete ast_tree.ok();
 	std::cout << "process exited successfully" << std::endl;

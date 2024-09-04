@@ -22,25 +22,20 @@ namespace builtins {
 
 // print.arg
 // TODO: this won't print strings properly
-Object *print(Object *self, Object *arg) {
-	switch (arg->get_type()) {
-		case object_type::integer: std::cout << arg->as_integer().ok(); break;
-		case object_type::function: std::cout << "<function>"; break;
-		case object_type::null: std::cout << "<null>"; break;
-		case object_type::array: std::cout << "<array>"; break;
-	}
+ObjectRef print(ObjectRef self, ObjectRef arg) {
+	std::cout << arg->to_string();
 	return arg;
 }
 
 // return.arg
-Object *ret(Object *self, Object *arg) { 
+ObjectRef ret(ObjectRef self, ObjectRef arg) { 
 	return arg; 
 }
 
 // --------------Object Functions-------------------------------------
 
 // a.set.arg
-Object *set(Object *self, Object *arg) {
+ObjectRef set(ObjectRef self, ObjectRef arg) {
 	self->set(arg);
 	return self;
 }
@@ -48,7 +43,7 @@ Object *set(Object *self, Object *arg) {
 // --------------Integer Functions------------------------------------
 
 // self.add.arg
-Object *add(Object *self, Object *arg) {
+ObjectRef add(ObjectRef self, ObjectRef arg) {
 	*self->as_integer().ok() += *arg->as_integer().ok();
 
 	return self;
@@ -56,7 +51,7 @@ Object *add(Object *self, Object *arg) {
 
 // --------------Array Functions--------------------------------------
 
-Object *get(Object *self, Object *arg) {
+ObjectRef get(ObjectRef self, ObjectRef arg) {
 	
 }
 
