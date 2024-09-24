@@ -1,117 +1,89 @@
 #include "ast.h"
 
-const std::string LITERAL_TAG = "~literal~";
+using namespace dot;
 
-const std::string SELF_TAG = "@";
-const std::string ARG_TAG = "$";
+object_ptr ast::FunctionDefinition::call(object_ptr self, object_ptr arg, const location &loc) const {printf("in %s\n", __PRETTY_FUNCTION__);
+	(void) loc;
 
-dot::result::Result<dot::ObjectRef, dot::error::RuntimeError *> dot::ast::IntegerLiteral::eval(dot::ObjectRef parent) const {
-	return dot::ObjectAllocator::create(parent, LITERAL_TAG, integer);
-}
+	object_ptr last_object = nullptr;
 
-dot::result::Result<dot::ObjectRef, dot::error::RuntimeError *> dot::ast::StringLiteral::eval(dot::ObjectRef parent) const {
-	return dot::ObjectAllocator::create(parent, LITERAL_TAG, string);
-}
+	self->add_self_and_arg(self, arg);
 
-dot::result::Result<dot::ObjectRef, dot::error::RuntimeError *> dot::ast::Identifier::eval(dot::ObjectRef parent) const {
-	// check if object exists
-	dot::result::Result<ObjectRef , dot::error::NoSuchObjectError> exists = dot::ObjectAllocator::get_tag(parent, tag);
-	
-	// if it does, return it
-	// no need to inc ref as we maintain the same ref as is returned
-	if (exists.is_ok())
-		return exists.ok();
-
-	// else create new null
-	return dot::ObjectAllocator::create(parent, tag);
-}
-
-dot::result::Result<dot::ObjectRef, dot::error::RuntimeError *> dot::ast::ArrayLiteral::eval(dot::ObjectRef parent) const {
-	dot::ObjectRef this_object = dot::ObjectAllocator::create(parent, LITERAL_TAG, array_type());
-	array_type *this_array = this_object->as_array().ok();
-
-	for (dot::ast::Node *child : children) {
-		dot::result::Result<dot::ObjectRef, dot::error::RuntimeError *> child_result = child->eval(this_object);
-
-		if (child_result.is_err())
-			return child_result.err();
-
-		this_array->push_back(child_result.ok());
+	for (const node_ptr &child : children) {
+		last_object = child->evaluate(self);
+		std::cout << "completed function line, result = " << last_object->to_string() << std::endl;
 	}
 
-	return this_object;
-}
-
-dot::result::Result<dot::ObjectRef, dot::error::RuntimeError *> function_binding(const dot::ast::FunctionDefinition *function, dot::ObjectRef self, dot::ObjectRef argument) {
-	dot::ObjectRef last_object = nullptr;
-
-	dot::ObjectAllocator::set_tag(self, "@", self);
-	dot::ObjectAllocator::set_tag(self, "$", argument);
-
-	for (const dot::ast::Node *child : function->children) {
-		dot::result::Result<dot::ObjectRef, dot::error::RuntimeError *> child_result = child->eval(self);
-		
-		if (child_result.is_err())
-			return child_result.err();
-
-		last_object = child_result.ok();
-	}
-
-	dot::ObjectAllocator::remove_tag(self, "@");
-	dot::ObjectAllocator::remove_tag(self, "$");
+	self->remove_self_and_arg();
 
 	return last_object;
 }
 
-dot::result::Result<dot::ObjectRef, dot::error::RuntimeError *> dot::ast::FunctionDefinition::eval(dot::ObjectRef parent) const {
-	// TODO: after binding a function, we should keep that binding so we don't rebind
-	// TODO: couldn't we pass parent instead of placeholder 1?
-	function_type this_function = std::bind(function_binding, this, parent, std::placeholders::_1);
-	// TODO: is this the right parent?
-	return dot::ObjectAllocator::create(parent, LITERAL_TAG, this_function);
+object_ptr ast::FunctionDefinition::evaluate(object_ptr parent) const {printf("in %s\n", __PRETTY_FUNCTION__);
+	(void) parent;
+
+	auto call = std::bind(&ast::FunctionDefinition::call, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+	return object::create(callwrapper<object_ptr>(call));
 }
 
-dot::result::Result<dot::ObjectRef, dot::error::RuntimeError *> dot::ast::Application::eval(dot::ObjectRef parent) const {
+object_ptr ast::ArrayLiteral::evaluate(object_ptr parent) const {printf("in %s\n", __PRETTY_FUNCTION__);
+	array_type array = array_type();
 
-	dot::result::Result<dot::ObjectRef, dot::error::RuntimeError *> target_result = target->eval(parent);
-
-	if (target_result.is_err())
-		return target_result.err();
-
-	ObjectRef target_object = target_result.ok();
-	ObjectRef argument_object = nullptr;
-
-	std::cout << "applying" << std::endl;
-	target->print(1);
-	argument->print(1);
-
-	// target is function
-	if (target_object->get_type() == dot::object_type::function) {
-		function_type *function = target_object->as_function().ok();
-
-		// TODO: is null for parent the right thing to do here? I think so
-		dot::result::Result<dot::ObjectRef, dot::error::RuntimeError *> argument_result = argument->eval(nullptr);
-
-		if (argument_result.is_err())
-			return argument_result.err();
-
-		argument_object = argument_result.ok();
-
-		// the self argument of a function is the owner of the function
-		// so a.set would have the owner a
-		dot::result::Result<ObjectRef, dot::error::RuntimeError *> result = (*function)(argument_object);
-
-		if (result.is_ok()) 
-			std::cout << "function produced " << result.ok()->to_string() << std::endl;
-			
-		return result;
+	for (const node_ptr &child : this->children) {
+		array.push_back(child->evaluate(parent));
 	}
 
-	// else try getting
-	dot::result::Result<dot::ObjectRef, dot::error::RuntimeError *> result = argument->eval(target_object);
+	array.shrink_to_fit();
+	return dot::object::create(array);
+}
 
-	if (result.is_ok()) 
-		std::cout << "apply produced " << result.ok()->to_string() << std::endl;
+object_ptr ast::Application::evaluate(object_ptr parent) const {printf("in %s\n", __PRETTY_FUNCTION__);
+	// for function calls, parent will always be the function
+	// that the application was called in
 
-	return result;
+	object_ptr target_obj = this->target->evaluate(parent);
+	object_ptr argument_obj = nullptr;
+
+	std::cout << "applying" << std::endl;
+	std::cout << '\t' << target_obj->to_string() << std::endl;
+	argument->print(1);
+
+	if (target_obj->type() == dot::object_type::function) {
+		function_type &function = target_obj->get_function(this->loc);
+
+		// for anonymous functions
+		if (!function.is_bound())
+			function.bind_to(parent);
+
+		argument_obj = argument->evaluate(parent);
+
+		return function(argument_obj, this->loc);
+	}
+
+	// TODO: often, this being an integer/string/array makes
+	// no sense, and should be an error. do that.
+	return argument->evaluate(target_obj);
+}
+
+object_ptr ast::Identifier::evaluate(object_ptr parent) const {printf("in %s, tag=%s, parent=%p\n", __PRETTY_FUNCTION__, tag.c_str(), (void *) parent.get());
+	object_ptr obj = object::get_child_of(parent, this->tag);
+	printf("completed identifying %s -> %s\n", tag.c_str(), obj->to_string().c_str());
+	return obj;
+}
+
+object_ptr ast::IntegerLiteral::evaluate(object_ptr parent) const {printf("in %s, val=%s\n", __PRETTY_FUNCTION__, integer.c_str());
+	(void) parent;
+	// TODO: array indexing?
+	integer_type value;
+	try { 
+		value = std::stoll(this->integer);
+	} catch (...) {
+		throw error::SyntaxError(this->loc, "invalid integer literal " + this->integer);
+	}
+	return object::create(value);
+}
+
+object_ptr ast::StringLiteral::evaluate(object_ptr parent) const {printf("in %s, str=%s\n", __PRETTY_FUNCTION__, string.c_str());
+	(void) parent;
+	return object::create(this->string);
 }

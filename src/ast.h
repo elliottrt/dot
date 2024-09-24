@@ -1,90 +1,74 @@
-#ifndef _DOT_AST
-#define _DOT_AST
+#ifndef _AST
+#define _AST
 
-#include <vector>
-#include <iostream>
-
-#include "dot-object.h"
-#include "dot-alloc.h"
-#include "dot-result.h"
-#include "dot-error.h"
-
+#include "error.h"
 #include "token.h"
+#include "result.h"
+#include "object.h"
+
+#include <iostream>
+#include <vector>
+
+// TODO: put ast-print into its own cpp file
 
 namespace dot {
 namespace ast {
 
 	// generic node type
 	struct Node {
+		const location &loc;
+
+		Node(const location &loc): loc(loc) {}
 
 		virtual ~Node() = default;
-	
-		void print() const { print(0); }
+
 		virtual void print(const size_t &depth) const = 0;
 
-		virtual result::Result<ObjectRef, error::RuntimeError *> eval(ObjectRef parent) const = 0;
+		virtual object_ptr evaluate(object_ptr parent) const = 0;
 	};
 
-	struct None : public Node {
-		void print(const size_t &depth) const override {
-			std::cout << std::string(depth, '\t') << "None" << std::endl;
-		}
-	};
+	typedef std::shared_ptr<Node> node_ptr;
 
 	// a group (chain) of nodes
 	struct Group : public Node {
+		std::vector<node_ptr> children;
 
-		std::vector<Node *> children;
-
-		Group(const std::vector<Node *> &children): children(children) {}
-
-		~Group() override {
-			for (Node *child : children) 
-				delete child;
-		}
-
+		Group(const location &loc, const std::vector<node_ptr> &children): Node(loc), children(children) {}
 	};
 
 	// function definition
 	struct FunctionDefinition : public Group { 
-
-		FunctionDefinition(const std::vector<Node *> &children): Group(children) {}
+		FunctionDefinition(const location &loc, const std::vector<node_ptr> &children): Group(loc, children) {}
 
 		void print(const size_t &depth) const override {
 			std::cout << std::string(depth, '\t') << "Function Definition" << std::endl;
-			for (const Node *child : children)
+			for (const node_ptr &child : children)
 				child->print(depth + 1);
 		}
 
-		result::Result<ObjectRef, error::RuntimeError *> eval(ObjectRef parent) const override;
+		object_ptr call(object_ptr self, object_ptr arg, const location &loc) const;
+		object_ptr evaluate(object_ptr parent) const override;
 	};
 
 	// array literal
 	struct ArrayLiteral : public Group {
-
-		ArrayLiteral(const std::vector<Node *> &children): Group(children) {}
+		ArrayLiteral(const location &loc, const std::vector<node_ptr> &children): Group(loc, children) {}
 		
 		void print(const size_t &depth) const override {
 			std::cout << std::string(depth, '\t') << "Array Literal" << std::endl;
-			for (const Node *child : children)
+			for (const node_ptr &child : children)
 				child->print(depth + 1);
 		}
 
-		result::Result<ObjectRef, error::RuntimeError *> eval(ObjectRef parent) const override;
+		object_ptr evaluate(object_ptr parent) const override;
 	};
 
 	// (a).(b)
 	struct Application : public Node {
+		node_ptr target;
+		node_ptr argument;
 
-		Node *target;
-		Node *argument;
-
-		Application(Node *target, Node *argument): target(target), argument(argument) {}
-
-		~Application() override {
-			delete target;
-			delete argument;
-		}
+		Application(const location &loc, node_ptr target, node_ptr argument): Node(loc), target(target), argument(argument) {}
 
 		void print(const size_t &depth) const override {
 			std::cout << std::string(depth, '\t') << "Application: " << std::endl;
@@ -92,52 +76,49 @@ namespace ast {
 			argument->print(depth + 1);
 		}
 
-		result::Result<ObjectRef, error::RuntimeError *> eval(ObjectRef parent) const override;
+		object_ptr evaluate(object_ptr parent) const override;
 	};
 
 	// name of variable or function
 	struct Identifier : public Node {
-
 		const std::string tag;
 
-		Identifier(const std::string &tag): tag(tag) {}
+		Identifier(const location &loc, const std::string &tag): Node(loc), tag(tag) {}
 
 		void print(const size_t &depth) const override {
 			std::cout << std::string(depth, '\t') << "Identifier: " << tag << std::endl;
 		}
 
-		result::Result<ObjectRef, error::RuntimeError *> eval(ObjectRef parent) const override;
+		object_ptr evaluate(object_ptr parent) const override;
 	};
 
 	// integer literal
 	struct IntegerLiteral : public Node {
+		const std::string integer;
 
-		const integer_type integer;
-
-		IntegerLiteral(const integer_type &integer): integer(integer) {}
+		IntegerLiteral(const location &loc, const std::string &integer): Node(loc), integer(integer) {}
 
 		void print(const size_t &depth) const override {
 			std::cout << std::string(depth, '\t') << "Integer Literal: " << integer << std::endl;
 		}
 
-		result::Result<ObjectRef, error::RuntimeError *> eval(ObjectRef parent) const override;
+		object_ptr evaluate(object_ptr parent) const override;
 	};
 
 	// string literal
 	struct StringLiteral : public Node {
-
 		const std::string string;
 
-		StringLiteral(const std::string &string): string(string) {}
+		StringLiteral(const location &loc, const std::string &string): Node(loc), string(string) {}
 
 		void print(const size_t &depth) const override {
 			std::cout << std::string(depth, '\t') << "String Literal: " << string << std::endl;
 		}
 
-		result::Result<ObjectRef, error::RuntimeError *> eval(ObjectRef parent) const override;
+		object_ptr evaluate(object_ptr parent) const override;
 	};
 
-	result::Result<Node *, error::SyntaxError> generate_tree(const std::vector<token::token> &tokens);
+	node_ptr generate_tree(const std::vector<token::token> &tokens);
 
 }
 }

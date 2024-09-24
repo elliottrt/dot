@@ -1,0 +1,14 @@
+Compilation?
+- for known functions that we can evaluate at compile-time
+- allows constants to be removed better
+- arrays won't be created multiple times in a function
+- allows creation of a call graph
+
+look at python's garbage collection
+
+Resolving the function vs. not-function issue
+	when evaluating the ast, 
+		if the current object is a function
+			call the function with the next object
+		else
+			expect an identifier (or maybe an integerliteral for array indexing?)

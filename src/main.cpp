@@ -5,8 +5,9 @@
 
 #include "token.h"
 #include "ast.h"
+#include "error.h"
 
-#include "dot-alloc.h"
+#include "object.h"
 
 // from https://stackoverflow.com/questions/116038/how-do-i-read-an-entire-file-into-a-stdstring-in-c
 std::string slurp(const std::string &path) {
@@ -18,63 +19,35 @@ std::string slurp(const std::string &path) {
 
 int main(int argc, char const *argv[]) {
 
-	(void) argc;
-	(void) argv;
-
-	using namespace dot::error;
-	using namespace dot::result;
 	using namespace dot::token;
+	using namespace dot::error;
 	using namespace dot::ast;
 
 	// read all of the contents of the file and tokenize it
-	Result<std::vector<token>, SyntaxError> tokens = dot::token::tokenize(slurp("test.dot"));
-
-	// if tokenization encounters an error, display it and exit
-	if (tokens.is_err()) {
-		const SyntaxError &error = tokens.err();
-		fprintf(stderr, "%s:%lu:%lu: error: %s\n", "test.dot", error.row, error.col, error.what.c_str());
-		return EXIT_FAILURE;
-	}
+	std::vector<token> tokens = dot::token::tokenize("test.dot", slurp("test.dot"));
 
 	// display all tokens read from the file
-	// for (token &tok : tokens.ok())
+	// for (const token &tok : tokens.ok())
 		// printf("%s:%lu:%lu: '%c' (%d): \"%s\"\n", "test.dot", tok.row, tok.col, (char) tok.type, (int) tok.type, tok.text.c_str());
 
-	// TODO: ast tree should use gc_ptr
-	Result<Node *, SyntaxError> ast_tree = generate_tree(tokens.ok());
-
-	// if ast generation encounters an error, display it and exit
-	if (ast_tree.is_err()) {
-		const SyntaxError &error = ast_tree.err();
-		fprintf(stderr, "%s:%lu:%lu: error: %s\n", "test.dot", error.row, error.col, error.what.c_str());
-		return EXIT_FAILURE;
-	}
+	node_ptr ast_tree = dot::ast::generate_tree(tokens);
 
 	// print the full ast tree
-	// ast_tree.ok()->Node::print();
+	ast_tree->print(0);
 
-	// TODO: make sure the gc_ptr is working
+	dot::object_ptr global = dot::object::create();
 
-	auto main = ast_tree.ok()->eval(nullptr);
+	dot::object_ptr main_function_obj = ast_tree->evaluate(global);
+	dot::function_type main_function = main_function_obj->get_function(ast_tree->loc);
+	main_function.bind_to(global);
 
-	if (main.is_err()) {
-		const RuntimeError *error = main.err();
-		throw error;
-		return EXIT_FAILURE;
-	}
+	dot::object_ptr result = main_function(
+		dot::object::from_argv(argc, argv), // argv array
+		ast_tree->loc // location of the main function
+	);
 
-	// arg is null (probably bad idea)
-	auto retval = main.ok()->as_function().ok()->operator()(nullptr);
+	std::cout << "final result = " << result->to_string() << std::endl;
 
-	if (retval.is_err()) {
-		const RuntimeError *error = retval.err();
-		throw error;
-		return EXIT_FAILURE;
-	}
-
-	std::cout << retval.ok()->to_string() << std::endl;
-
-	delete ast_tree.ok();
 	std::cout << "process exited successfully" << std::endl;
 	return EXIT_SUCCESS;
 }

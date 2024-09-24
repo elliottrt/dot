@@ -1,5 +1,7 @@
-build/
 old/
 .vscode/
 .DS_Store
+
 main
+src/*.o
+src/*.d

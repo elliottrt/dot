@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "dot-error.h"
+#include "location.h"
 
 namespace dot {
 namespace token {
@@ -30,16 +30,19 @@ namespace token {
 	struct token {
 		token_type type;
 		std::string text;
-		size_t row, col;
+		location loc;
 
-		token(token_type type, const std::string &text, size_t row, size_t col): type(type), text(text), row(row), col(col) {
-
-		}
+		token(const location &loc, token_type type, const std::string &text)
+		: type(type), text(text), loc(loc) {}
 
 		// TODO: token to string for error messages
 	};
 
-	result::Result<std::vector<token>, error::SyntaxError> tokenize(const std::string &source);
+	using ptr_t = const token *;
+	using stack_t = std::vector<ptr_t>;
+	using group_t = std::vector<ptr_t>;
+
+	std::vector<token> tokenize(const std::string &file, const std::string &source);
 
 }
 }
