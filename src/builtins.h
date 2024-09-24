@@ -10,7 +10,9 @@ namespace builtins {
 
 	typedef const std::unordered_map<const char *, function_type::call_type> builtin_list_type;
 
-	// TODO: add global functions
+	// TODO: instead of adding each function to each object,
+	// consider checking each object against its groups
+	// and then return a function -> would save lots of memory
 	extern builtin_list_type GLOBAL_FUNCTIONS;
 	extern builtin_list_type OBJECT_FUNCTIONS;
 	extern builtin_list_type INTEGER_FUNCTIONS;

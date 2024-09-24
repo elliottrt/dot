@@ -9,8 +9,6 @@
 #include <iostream>
 #include <vector>
 
-// TODO: put ast-print into its own cpp file
-
 namespace dot {
 namespace ast {
 
@@ -40,11 +38,7 @@ namespace ast {
 	struct FunctionDefinition : public Group { 
 		FunctionDefinition(const location &loc, const std::vector<node_ptr> &children): Group(loc, children) {}
 
-		void print(const size_t &depth) const override {
-			std::cout << std::string(depth, '\t') << "Function Definition" << std::endl;
-			for (const node_ptr &child : children)
-				child->print(depth + 1);
-		}
+		void print(const size_t &depth) const override;
 
 		object_ptr call(object_ptr self, object_ptr arg, const location &loc) const;
 		object_ptr evaluate(object_ptr parent) const override;
@@ -54,11 +48,7 @@ namespace ast {
 	struct ArrayLiteral : public Group {
 		ArrayLiteral(const location &loc, const std::vector<node_ptr> &children): Group(loc, children) {}
 		
-		void print(const size_t &depth) const override {
-			std::cout << std::string(depth, '\t') << "Array Literal" << std::endl;
-			for (const node_ptr &child : children)
-				child->print(depth + 1);
-		}
+		void print(const size_t &depth) const override;
 
 		object_ptr evaluate(object_ptr parent) const override;
 	};
@@ -70,11 +60,7 @@ namespace ast {
 
 		Application(const location &loc, node_ptr target, node_ptr argument): Node(loc), target(target), argument(argument) {}
 
-		void print(const size_t &depth) const override {
-			std::cout << std::string(depth, '\t') << "Application: " << std::endl;
-			target->print(depth + 1);
-			argument->print(depth + 1);
-		}
+		void print(const size_t &depth) const override;
 
 		object_ptr evaluate(object_ptr parent) const override;
 	};
@@ -85,9 +71,7 @@ namespace ast {
 
 		Identifier(const location &loc, const std::string &tag): Node(loc), tag(tag) {}
 
-		void print(const size_t &depth) const override {
-			std::cout << std::string(depth, '\t') << "Identifier: " << tag << std::endl;
-		}
+		void print(const size_t &depth) const override;
 
 		object_ptr evaluate(object_ptr parent) const override;
 	};
@@ -98,9 +82,7 @@ namespace ast {
 
 		IntegerLiteral(const location &loc, const std::string &integer): Node(loc), integer(integer) {}
 
-		void print(const size_t &depth) const override {
-			std::cout << std::string(depth, '\t') << "Integer Literal: " << integer << std::endl;
-		}
+		void print(const size_t &depth) const override;
 
 		object_ptr evaluate(object_ptr parent) const override;
 	};
@@ -111,9 +93,7 @@ namespace ast {
 
 		StringLiteral(const location &loc, const std::string &string): Node(loc), string(string) {}
 
-		void print(const size_t &depth) const override {
-			std::cout << std::string(depth, '\t') << "String Literal: " << string << std::endl;
-		}
+		void print(const size_t &depth) const override;
 
 		object_ptr evaluate(object_ptr parent) const override;
 	};

@@ -183,7 +183,6 @@ void dot::object::add_system_function(const char *name, const dot::function_type
 	child_map.insert({std::string(name), dot::object::create(function)});
 }
 
-// TODO: make sure these functions work
 void dot::object::add_self_and_arg(object_ptr self, object_ptr arg) {
 	child_map[std::string(1, (char) dot::token::SELF)] = self;
 	child_map[std::string(1, (char) dot::token::ARGUMENT)] = arg;
