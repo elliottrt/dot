@@ -94,6 +94,7 @@ namespace dot {
 		static void set(object_ptr dst, object_ptr src);
 	};
 
+	const char *object_type_name(const dot::object_type &type);
 }
 
 #endif

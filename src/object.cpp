@@ -3,7 +3,7 @@
 #include "builtins.h"
 #include "token.h"
 
-const char *object_type_name(const dot::object_type &type) {
+const char *dot::object_type_name(const dot::object_type &type) {
 	switch (type) {
 		case dot::object_type::integer: return "integer";
 		case dot::object_type::string: return "string";
@@ -161,8 +161,6 @@ dot::object_ptr dot::object::get(dot::object_ptr self, const std::string &name) 
 	if (position != child_map.end()) {
 		printf("object %s exists in parent\n", name.c_str());
 		dot::object_ptr child_obj = position->second;
-
-		printf("object is null? %d\n", child_obj == nullptr);
 
 		if (child_obj->type() == dot::object_type::function) {
 			child_obj

@@ -2,18 +2,19 @@
 
 using namespace dot;
 
-#define GIVE(L) for (const auto &p : L) { object->add_system_function(p.first, callwrapper<dot::object_ptr>(p.second)); }
+DOT_DECLARE(dot_length) {
+	(void) self;
 
-	void dot::builtins::give_functions(object_ptr object) {
-		switch (object->type()) {
-			case object_type::function: /* functions don't have children */ return;
-			case object_type::integer: GIVE(INTEGER_FUNCTIONS) break;
-			case object_type::string: GIVE(STRING_FUNCTIONS) break;
-			case object_type::array: GIVE(ARRAY_FUNCTIONS) break;
-			default: break;
-		}
-		GIVE(OBJECT_FUNCTIONS)
-	}
-#undef GIVE
+	const object_type &type = arg->type();
 
-builtins::builtin_list_type builtins::GLOBAL_FUNCTIONS = {};
+	if (type == object_type::array)
+		return dot::object::create(arg->get_arr(loc).size());
+	else if (type == object_type::string)
+		return dot::object::create(arg->get_str(loc).size());
+	else
+		throw error::TypeError(loc, "array or string", object_type_name(type));
+}
+
+builtins::builtin_list_type builtins::GLOBAL_FUNCTIONS = {
+	{"length", dot_length}
+};

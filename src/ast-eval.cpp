@@ -60,9 +60,21 @@ object_ptr ast::Application::evaluate(object_ptr parent) const {printf("in %s\n"
 		return function(argument_obj, this->loc);
 	}
 
-	// TODO: often, this being an integer/string/array makes
-	// no sense, and should be an error. do that.
-	return argument->evaluate(target_obj);
+	// TODO: type checking?
+	argument_obj = argument->evaluate(target_obj);
+
+	// array indexing by integers instead of `get`
+	if (target_obj->type() == dot::object_type::array && argument_obj->type() == dot::object_type::integer) {
+		array_type &array = target_obj->get_arr(loc);
+		integer_type &index = argument_obj->get_int(loc);
+
+		if (index < 0 || index >= (ssize_t) array.size())
+			throw error::RangeError(loc, index, array.size() - 1);
+
+		return array[index];
+	}
+
+	return argument_obj;
 }
 
 object_ptr ast::Identifier::evaluate(object_ptr parent) const {printf("in %s, tag=%s, parent=%p\n", __PRETTY_FUNCTION__, tag.c_str(), (void *) parent.get());
@@ -73,7 +85,6 @@ object_ptr ast::Identifier::evaluate(object_ptr parent) const {printf("in %s, ta
 
 object_ptr ast::IntegerLiteral::evaluate(object_ptr parent) const {printf("in %s, val=%s\n", __PRETTY_FUNCTION__, integer.c_str());
 	(void) parent;
-	// TODO: array indexing?
 	integer_type value;
 	try { 
 		value = std::stoll(this->integer);

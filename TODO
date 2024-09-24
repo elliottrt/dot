@@ -15,20 +15,31 @@
 		- [x] function scope
 		- [x] @ for self and $ for argument
 	- [x] ability to initialize variables to null
-	- [ ] arrays should be indexable without functions (eg array.0 -> 0th element of array)
 	- [x] argument ($) at the top level should be argv
-	- [ ] lazy evaluation after simplifying
 
 - Builtin functions, when possible, should be member functions of variables - will allow for polymorphism
 	- [ ] input/output
 	- [ ] equality
-	- [ ] array resize / fill / get element / set element
+	- [ ] array operators 
+		- [x] get element
+			- note: set element is done with `array.get.index.set.value`
+			- note: indexing can also be done with `array.<integer-literal>`
+		- [x] push
+		- [ ] pop
+		- [ ] insert
+		- [x] remove
+		- [ ] length
+		- note: other functions may be implemented using these
+	- [ ] string operators
+		- [ ] length
 	- [x] general set method
 	- [ ] figure out how editing already-set functions will work
 	- [ ] static/anonymous functions - functions with no owner
 	- [ ] math functions
 		- [ ] trig functions - Math.Sin.x? Math.Cos.x?
 		- [x] simple math functions
+		- [ ] bitwise math functions
+		- [ ] logical math functions
 		- [ ] double type - how??? 10.0 would be interpreted as 10 applied to 0
 	- [ ] control flow
 		- [ ] if
@@ -40,11 +51,13 @@
 	- [ ] exists function? - check if variable exists
 
 - Other
+	- [ ] do something about circular references with lists and objects
 	- [ ] static typing/inferring - interfaces?
 	- [ ] testing
 	- [ ] ability to import/include files
 		- when used, should return a variable containing all results in the file
 		to do this, return the 'global null' used when reading the imported file
+		and that will contain all variables/functions declared in that file
 	- [ ] standard library
 	- [ ] garbage collection of unused objects
 	- [ ] reporting of multiple errors

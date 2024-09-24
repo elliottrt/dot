@@ -27,6 +27,9 @@ object_ptr <function>(object_ptr self, object_ptr other) { ... }
 
 	void give_functions(object_ptr object);
 
+	bool has_function(object_ptr parent, const std::string &tag);
+	object_ptr call_function(object_ptr parent, object_ptr argument, const std::string &tag, const location &loc);
+
 }
 }
 
