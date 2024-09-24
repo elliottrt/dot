@@ -11,7 +11,7 @@ object_ptr ast::FunctionDefinition::call(object_ptr self, object_ptr arg, const 
 
 	for (const node_ptr &child : children) {
 		last_object = child->evaluate(self);
-		std::cout << "completed function line, result = " << last_object->to_string() << std::endl;
+		std::cout << "\n*** completed function line, result = " << last_object->to_string() << std::endl;
 	}
 
 	self->remove_self_and_arg();

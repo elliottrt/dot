@@ -73,9 +73,7 @@ namespace dot {
 
 		static object_ptr from_argv(int argc, const char **argv);
 
-		static object_ptr get_child_of(object_ptr self, const std::string &name) {
-			return self->get(self, name);
-		}
+		static object_ptr get_child_of(object_ptr self, const std::string &name);
 
 		std::string to_string();
 
@@ -85,8 +83,6 @@ namespace dot {
 		string_type &get_str(const location &loc);
 		array_type &get_arr(const location &loc);
 		function_type &get_function(const location &loc);
-
-		void add_system_function(const char *name, const function_type &function);
 
 		void add_self_and_arg(object_ptr self, object_ptr arg);
 		void remove_self_and_arg();

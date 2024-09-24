@@ -57,31 +57,31 @@ dot::object_value &dot::object_value::operator=(const dot::object_value &other) 
 
 dot::object_ptr dot::object::create() {
 	dot::object_ptr obj = std::make_shared<dot::object>();
-	dot::builtins::give_functions(obj);
+	// dot::builtins::give_functions(obj);
 	return obj;
 }
 
 dot::object_ptr dot::object::create(const integer_type &value) {
 	dot::object_ptr obj = std::make_shared<dot::object>(value);
-	dot::builtins::give_functions(obj);
+	// dot::builtins::give_functions(obj);
 	return obj;
 }
 
 dot::object_ptr dot::object::create(const string_type &value) {
 	dot::object_ptr obj = std::make_shared<dot::object>(value);
-	dot::builtins::give_functions(obj);
+	// dot::builtins::give_functions(obj);
 	return obj;
 }
 
 dot::object_ptr dot::object::create(const array_type &value) {
 	dot::object_ptr obj = std::make_shared<dot::object>(value);
-	dot::builtins::give_functions(obj);
+	// dot::builtins::give_functions(obj);
 	return obj;
 }
 
 dot::object_ptr dot::object::create(const dot::function_type &value) {
 	dot::object_ptr obj = std::make_shared<dot::object>(value);
-	dot::builtins::give_functions(obj);
+	// dot::builtins::give_functions(obj);
 	return obj;
 }
 
@@ -93,6 +93,16 @@ dot::object_ptr dot::object::from_argv(int argc, const char **argv) {
 	args.shrink_to_fit();
 
 	return std::make_shared<dot::object>(args);
+}
+
+dot::object_ptr dot::object::get_child_of(dot::object_ptr self, const std::string &name) {
+	object_ptr function_obj = builtins::get_function(self, name);
+	if (function_obj != nullptr) {
+		function_obj->get_function(location("logic error in " __FILE__, __LINE__, 0)).bind_to(self);
+		return function_obj;
+	}
+
+	return self->get(self, name);
 }
 
 std::string dot::object::to_string() {
@@ -175,10 +185,6 @@ dot::object_ptr dot::object::get(dot::object_ptr self, const std::string &name) 
 	dot::object_ptr new_object = dot::object::create();
 	child_map[name] = new_object;
 	return new_object;
-}
-
-void dot::object::add_system_function(const char *name, const dot::function_type &function) {
-	child_map.insert({std::string(name), dot::object::create(function)});
 }
 
 void dot::object::add_self_and_arg(object_ptr self, object_ptr arg) {

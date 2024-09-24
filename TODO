@@ -51,6 +51,7 @@
 	- [ ] exists function? - check if variable exists
 
 - Other
+	- [ ] read-eval-print loop interactive prompt
 	- [ ] do something about circular references with lists and objects
 	- [ ] static typing/inferring - interfaces?
 	- [ ] testing
