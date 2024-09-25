@@ -52,6 +52,7 @@
 - Other
 	- [ ] proper command line interface
 	- [ ] read-eval-print loop interactive prompt
+	- [ ] the system functions should have short definitions in the maps so documentation can be generated
 	- [ ] do something about circular references with lists and objects
 	- [ ] static typing/inferring - interfaces?
 	- [ ] testing
