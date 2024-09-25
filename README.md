@@ -16,7 +16,7 @@ For example, `a.set.10` creates a null-valued variable named `a`, finds the syst
 
 Integer literals are represented in decimal and may be negative:  ```0```, ```10000```, ```-434234```, ```3``` etc.
 
-String literals are enclosed in double quotation marks and may have escape characters such as `\t`, `\n`, and `\"`:  
+String literals are enclosed in double quotation marks, and may make use of escape characters such as `\t`, `\n`, and `\"`:  
 ```"Hello, World!\n"```
 
 Array literals may have differently-typed elements and are enclosed in square brackets:  
@@ -43,7 +43,7 @@ Function Definitions are enclosed in curly brackets and contain 0 or more lines 
  - has attributes
 #### array
  - inherent value: array of objects
- - may be indexed by integers or with the `get` function
+ - may be indexed by integer literals (`array.4`) or with the `get` function, which also accepts integer variables and expressions (`array.get.(4.add.2)`)
  - setting elements may be done by calling the `set` function on an element like so: `array.get.<index>.set.<new value>`
  - has attributes
 #### function
