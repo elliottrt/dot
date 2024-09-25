@@ -32,7 +32,7 @@ int main(int argc, char const *argv[]) {
 	node_ptr ast_tree = dot::ast::generate_tree(tokens);
 
 	// print the full ast tree
-	ast_tree->print(0);
+	// ast_tree->print(0);
 
 	dot::object_ptr global = dot::object::create();
 
@@ -40,12 +40,13 @@ int main(int argc, char const *argv[]) {
 	dot::function_type main_function = main_function_obj->get_function(ast_tree->loc);
 	main_function.bind_to(global);
 
-	dot::object_ptr result = main_function(
+	//dot::object_ptr result = 
+	main_function(
 		dot::object::from_argv(argc, argv), // argv array
 		ast_tree->loc // location of the main function
 	);
 
-	printf("final result = %s\n", result->to_string().c_str());
+	//printf("final result = %s\n", result->to_string().c_str());
 
 	printf("process exited successfully\n");
 	return EXIT_SUCCESS;

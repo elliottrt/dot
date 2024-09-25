@@ -10,7 +10,6 @@ namespace builtins {
 
 	typedef const std::unordered_map<std::string, function_type::call_type> builtin_list_type;
 
-	extern builtin_list_type GLOBAL_FUNCTIONS;
 	extern builtin_list_type OBJECT_FUNCTIONS;
 	extern builtin_list_type INTEGER_FUNCTIONS;
 	extern builtin_list_type STRING_FUNCTIONS;

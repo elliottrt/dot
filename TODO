@@ -20,6 +20,7 @@
 
 - Builtin functions, when possible, should be member functions of variables - will allow for polymorphism
 	- [ ] input/output
+		- [x] print
 	- [ ] equality
 	- [ ] array operators 
 		- [x] get element

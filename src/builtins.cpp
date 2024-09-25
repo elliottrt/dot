@@ -14,7 +14,6 @@ const function_type::call_type *find_function(object_ptr caller, const std::stri
 		default: break;
 	}
 	CHECK_HAS_FUNC(builtins::OBJECT_FUNCTIONS)
-	CHECK_HAS_FUNC(builtins::GLOBAL_FUNCTIONS)
 
 #undef CHECK_HAS_FUNC
 	return nullptr;

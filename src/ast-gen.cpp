@@ -70,6 +70,40 @@ std::vector<token::group_t> generate_groups(const token::group_t &tokens, token:
 	return groups;
 }
 
+std::string::value_type unescaped_character(std::string::value_type ch, const location &loc) {
+	switch (ch) {
+		case 'n': return '\n';
+		case 'r': return '\r';
+		case 'b': return '\b';
+		case 't': return '\t';
+		case 'f': return '\f';
+		case 'v': return '\v';
+		case '"': 
+		case '\\':
+			return ch;
+		default: throw error::SyntaxError(loc, std::string("invalid escape character '") + ch + std::string("'"));
+	}
+}
+
+std::string unescape_string(const std::string &source, const location &loc) {
+	if (source.empty()) return source;
+
+	std::string result = source;
+
+	size_t pos;
+	while ((pos = result.find('\\')) != std::string::npos) {
+		if (pos == result.size() - 1)
+			throw error::SyntaxError(loc, "string ends with invalid escape character");
+
+		std::string::value_type next = result.at(pos + 1);
+
+		std::string::value_type replacement = unescaped_character(next, loc);
+		result.replace(pos, (size_t) 2, std::string(1, replacement));
+	}
+	
+	return result;
+}
+
 node_ptr generate_trivial(token::ptr_t token) {
 
 	switch (token->type) {
@@ -78,8 +112,7 @@ node_ptr generate_trivial(token::ptr_t token) {
 		case token::token_type::SELF:
 			return std::make_shared<Identifier>(token->loc, token->text);
 		case token::token_type::STRING:
-			// TODO: unescape the text
-			return std::make_shared<StringLiteral>(token->loc, token->text);
+			return std::make_shared<StringLiteral>(token->loc, unescape_string(token->text, token->loc));
 		case token::token_type::INTEGER:
 			return std::make_shared<IntegerLiteral>(token->loc, token->text);
 		default:
@@ -268,6 +301,5 @@ node_ptr dot::ast::generate_tree(const std::vector<token::token> &_tokens) {
 	for (size_t i = 0; i < tokens.size(); ++i)
 		tokens[i] = &_tokens[i];
 
-	// TODO: will this error if _tokens is empty?
 	return generate_function(tokens, tokens[0]->loc);
 }
