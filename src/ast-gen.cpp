@@ -173,10 +173,6 @@ node_ptr generate_bracketed(const token::group_t &tokens) {
 	// remove front and back
 	token::group_t trimmed_group = token::group_t(tokens.cbegin() + 1, tokens.cend() - 1);
 
-	std::cout << "length of trimmed group = " << trimmed_group.size() << std::endl;
-	for (const auto i : trimmed_group)
-		std::cout << "\t" << i->text << std::endl;
-
 	switch (open_type) {
 		case token::token_type::OPEN_PAREN: return generate_forward(generate_groups(trimmed_group));
 		case token::token_type::OPEN_CURLY_BRACKET: return generate_function(trimmed_group, tokens[0]->loc);
@@ -235,19 +231,12 @@ node_ptr generate_function(const token::group_t &tokens, const location &beginLo
 	// current group
 	token::group_t child_group;
 
-	std::cout << "length of func tokens = " << tokens.size() << std::endl;
-	for (const auto i : tokens)
-		std::cout << "\t" << i->text << std::endl;
-
 	// groups are separated by token::token_type::LINE_END unless within function
 
 	for (auto iter = tokens.cbegin(); iter != tokens.cend(); ++iter) {
 		// if we've reached the end of a line not in a function
 		if (((*iter)->type == token::token_type::LINE_END || (*iter)->type == token::token_type::TOKEN_END) && stack.empty()) {
 			if (child_group.size() > 0) {
-				std::cout << "length of child tokens = " << child_group.size() << std::endl;
-				for (const auto i : child_group)
-					std::cout << "\t" << i->text << std::endl;
 				children.push_back(generate_forward(generate_groups(child_group)));
 				child_group.clear();
 			}
@@ -260,7 +249,6 @@ node_ptr generate_function(const token::group_t &tokens, const location &beginLo
 			stack.pop_back();
 			child_group.push_back(*iter);
 		} else {
-			std::cout << "pushed " << (*iter)->text << " to child group" << std::endl;
 			child_group.push_back(*iter);
 		}
 	}
@@ -270,16 +258,10 @@ node_ptr generate_function(const token::group_t &tokens, const location &beginLo
 		throw SyntaxError(last->loc, "unclosed {");
 	}
 
-	if (child_group.size() > 0) {
-		std::cout << "length of LAST child group = " << child_group.size() << std::endl;
-		for (const auto i : child_group)
-			std::cout << "\t" << i->text << std::endl;
+	// if there are any leftovers at the end of the function, add them
+	if (child_group.size() > 0)
 		children.push_back(generate_forward(generate_groups(child_group)));
-	}
 
-	std::cout << "length of children = " << children.size() << std::endl;
-	for (const auto &i : children)
-		i->print(1);
 	return std::make_shared<FunctionDefinition>(beginLoc, children);
 }
 
