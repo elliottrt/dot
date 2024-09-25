@@ -1,0 +1,8 @@
+
+value.set.0
+
+value.while.{
+	print."1\n"
+}.else.{
+	print."0\n"
+}

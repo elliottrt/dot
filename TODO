@@ -33,17 +33,18 @@
 		- [x] length
 		- note: other functions may be implemented using these
 	- [ ] string operators
-		- [ ] length
+		- [x] length
+		- note: need more
 	- [x] general set method
 	- [ ] math functions
 		- [ ] trig functions - Math.Sin.x? Math.Cos.x?
 		- [x] simple math functions
 		- [ ] bitwise math functions
 		- [ ] logical math functions
-		- [ ] double type - how??? 10.0 would be interpreted as 10 applied to 0
-	- [ ] control flow
-		- [ ] if
-		- [ ] while
+		- [ ] double type - how? 10.0 would be interpreted as 10 applied to 0
+	- [x] control flow
+		- [x] if
+		- [x] while
 	- [ ] delete function - delete a child of an object
 		- note: something like `a.delete."b"`
 	- [ ] exists function? - check if variable exists
@@ -56,6 +57,8 @@
 	- [ ] do something about circular references with lists and objects
 	- [ ] static typing/inferring - interfaces?
 	- [ ] testing
+	- [ ] function application - when a function is passed to a function, we could return a thunk
+		- note: thunk would wait until given argument, then evaluate - would allow function composition
 	- [ ] ability to import/include files
 		- when used, should return a variable containing all results in the file
 		to do this, return the 'global null' used when reading the imported file

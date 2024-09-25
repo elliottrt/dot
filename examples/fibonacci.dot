@@ -1,0 +1,16 @@
+
+fib.set.10
+
+fib.a.set.0
+fib.b.set.1
+
+fib.while.{
+	print.(@.a)
+	print."\n"
+
+	temp.set.a
+	a.add.b
+	b.add.temp
+
+	@.sub.1
+}
