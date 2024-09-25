@@ -4,10 +4,16 @@
 #include <vector>
 #include <string>
 #include <functional>
-#include <iostream>
 
 #include "location.h"
 #include "callwrapper.h"
+
+#ifdef DOT_DEBUG
+#include <cstdio>
+#define DOT_PRINTF printf
+#else
+void DOT_PRINTF(const char *fmt...);
+#endif
 
 namespace dot {
 	class object;
@@ -91,6 +97,7 @@ namespace dot {
 	};
 
 	const char *object_type_name(const dot::object_type &type);
+
 }
 
 #endif

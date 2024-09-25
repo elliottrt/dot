@@ -183,14 +183,11 @@ node_ptr generate_bracketed(const token::group_t &tokens) {
 
 node_ptr generate_forward(const std::vector<token::group_t> &tokens) {
 
-	//printf("forwarding: group count: %lu\n", tokens.size());
-
 	if (tokens.size() == 0)
 		throw SyntaxError::LogicError(__FILE__, __LINE__);
 
 	if (tokens.size() == 1) {
 		const token::group_t &group = tokens.front();
-		//printf("\tsingle group; size = %lu\n", group.size());
 
 		if (group.size() == 1)
 			return generate_trivial(group.front());

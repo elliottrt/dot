@@ -6,7 +6,6 @@
 #include "result.h"
 #include "object.h"
 
-#include <iostream>
 #include <vector>
 
 namespace dot {

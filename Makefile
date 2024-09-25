@@ -2,7 +2,9 @@
 TARGET=main
 SOURCE=src
 
-CXXFLAGS=-std=c++11 -Wall -Wextra -Wpedantic -Isrc/
+#DEBUG_FLAG=-DDOT_DEBUG
+
+CXXFLAGS=-std=c++11 -Wall -Wextra -Wpedantic -Isrc/ $(DEBUG_FLAG)
 
 CXXSRC=$(wildcard $(SOURCE)/*.cpp)
 CXXOBJ=$(CXXSRC:.cpp=.o)

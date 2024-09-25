@@ -1,5 +1,4 @@
 
-#include <iostream>
 #include <fstream>
 #include <sstream>
 
@@ -46,9 +45,9 @@ int main(int argc, char const *argv[]) {
 		ast_tree->loc // location of the main function
 	);
 
-	std::cout << "final result = " << result->to_string() << std::endl;
+	printf("final result = %s\n", result->to_string().c_str());
 
-	std::cout << "process exited successfully" << std::endl;
+	printf("process exited successfully\n");
 	return EXIT_SUCCESS;
 }
 

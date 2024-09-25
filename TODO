@@ -43,7 +43,6 @@
 	- [ ] control flow
 		- [ ] if
 		- [ ] while
-		- [ ] repeat
 	- [ ] delete function - delete a child of an object
 		- note: something like `a.delete."b"`
 	- [ ] exists function? - check if variable exists

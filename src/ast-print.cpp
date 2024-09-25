@@ -3,32 +3,34 @@
 using namespace dot;
 using namespace dot::ast;
 
+const int INDENT_WIDTH = 2;
+
 void FunctionDefinition::print(const size_t &depth) const {
-	std::cout << std::string(depth, '\t') << "Function Definition" << std::endl;
+	DOT_PRINTF("%*sFunction Definition\n", INDENT_WIDTH * (int) depth, ""); 
 	for (const node_ptr &child : children)
 		child->print(depth + 1);
 }
 
 void ArrayLiteral::print(const size_t &depth) const {
-	std::cout << std::string(depth, '\t') << "Array Literal" << std::endl;
+	DOT_PRINTF("%*sArray Literal\n", INDENT_WIDTH * (int) depth, ""); 
 	for (const node_ptr &child : children)
 		child->print(depth + 1);
 }
 
 void Application::print(const size_t &depth) const {
-	std::cout << std::string(depth, '\t') << "Application: " << std::endl;
+	DOT_PRINTF("%*sApplication\n", INDENT_WIDTH * (int) depth, ""); 
 	target->print(depth + 1);
 	argument->print(depth + 1);
 }
 
 void Identifier::print(const size_t &depth) const {
-	std::cout << std::string(depth, '\t') << "Identifier: " << tag << std::endl;
+	DOT_PRINTF("%*sIdentifier: %s\n", INDENT_WIDTH * (int) depth, "", tag.c_str()); 
 }
 
 void IntegerLiteral::print(const size_t &depth) const {
-	std::cout << std::string(depth, '\t') << "Integer Literal: " << integer << std::endl;
+	DOT_PRINTF("%*sInteger Literal: %s\n", INDENT_WIDTH * (int) depth, "", integer.c_str()); 
 }
 
 void StringLiteral::print(const size_t &depth) const {
-	std::cout << std::string(depth, '\t') << "String Literal: " << string << std::endl;
+	DOT_PRINTF("%*sString Literal: %s\n", INDENT_WIDTH * (int) depth, "", string.c_str()); 
 }

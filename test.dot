@@ -1,2 +1,11 @@
 
-{$}.{5.add.$}.{$.mul.2}.10
+f.set.{$}
+g.set.{5.add.$}
+h.set.{2.mul.$}
+A.set.10
+
+A.set.(h.A)
+A.set.(g.A)
+A.set.(f.A)
+
+A

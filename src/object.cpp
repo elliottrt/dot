@@ -3,6 +3,10 @@
 #include "builtins.h"
 #include "token.h"
 
+#ifndef DOT_DEBUG
+void DOT_PRINTF(const char *fmt...) { (void) fmt; }
+#endif
+
 const char *dot::object_type_name(const dot::object_type &type) {
 	switch (type) {
 		case dot::object_type::integer: return "integer";
@@ -169,7 +173,7 @@ dot::object_ptr dot::object::get(dot::object_ptr self, const std::string &name) 
 	auto position = child_map.find(name);
 
 	if (position != child_map.end()) {
-		printf("object %s exists in parent\n", name.c_str());
+		DOT_PRINTF("object %s exists in parent\n", name.c_str());
 		dot::object_ptr child_obj = position->second;
 
 		if (child_obj->type() == dot::object_type::function) {
@@ -181,7 +185,7 @@ dot::object_ptr dot::object::get(dot::object_ptr self, const std::string &name) 
 		return child_obj;
 	}
 
-	printf("%s does not exist in parent, creating it...\n", name.c_str());
+	DOT_PRINTF("%s does not exist in parent, creating it...\n", name.c_str());
 	dot::object_ptr new_object = dot::object::create();
 	child_map[name] = new_object;
 	return new_object;
