@@ -10,19 +10,13 @@ namespace builtins {
 
 	typedef const std::unordered_map<std::string, function_type::call_type> builtin_list_type;
 
-	// TODO: instead of adding each function to each object,
-	// consider checking each object against its groups
-	// and then return a function -> would save lots of memory
 	extern builtin_list_type GLOBAL_FUNCTIONS;
 	extern builtin_list_type OBJECT_FUNCTIONS;
 	extern builtin_list_type INTEGER_FUNCTIONS;
 	extern builtin_list_type STRING_FUNCTIONS;
 	extern builtin_list_type ARRAY_FUNCTIONS;
 
-/*
-object_ptr <function>(object_ptr self, object_ptr other) { ... }
-*/
-
+	// object_ptr <function>(object_ptr self, object_ptr other) { ... }
 	#define DOT_DECLARE(N) object_ptr N(object_ptr self, object_ptr arg, const location &loc)
 
 	object_ptr get_function(object_ptr caller, const std::string &tag);

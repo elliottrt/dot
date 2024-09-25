@@ -16,6 +16,7 @@
 		- [x] @ for self and $ for argument
 	- [x] ability to initialize variables to null
 	- [x] argument ($) at the top level should be argv
+	- [ ] type errors should specify which argument caused the type error
 
 - Builtin functions, when possible, should be member functions of variables - will allow for polymorphism
 	- [ ] input/output
@@ -28,13 +29,11 @@
 		- [ ] pop
 		- [ ] insert
 		- [x] remove
-		- [ ] length
+		- [x] length
 		- note: other functions may be implemented using these
 	- [ ] string operators
 		- [ ] length
 	- [x] general set method
-	- [ ] figure out how editing already-set functions will work
-	- [ ] static/anonymous functions - functions with no owner
 	- [ ] math functions
 		- [ ] trig functions - Math.Sin.x? Math.Cos.x?
 		- [x] simple math functions
@@ -46,11 +45,12 @@
 		- [ ] while
 		- [ ] repeat
 	- [ ] delete function - delete a child of an object
-		- note: would need to be something like `a.delete.(@.set)` where a.delete deletes a child of a
-		- kind of difficult with current layout, requires parent and name of child
+		- note: something like `a.delete."b"`
 	- [ ] exists function? - check if variable exists
+		- note: something like `a.exists."b"`
 
 - Other
+	- [ ] proper command line interface
 	- [ ] read-eval-print loop interactive prompt
 	- [ ] do something about circular references with lists and objects
 	- [ ] static typing/inferring - interfaces?

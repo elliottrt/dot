@@ -12,7 +12,7 @@
 namespace dot {
 	class object;
 	typedef std::shared_ptr<object> object_ptr;
-
+	
 	typedef int integer_type;
 	typedef std::string string_type;
 	typedef std::vector<object_ptr> array_type;

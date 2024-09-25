@@ -6,7 +6,7 @@ using namespace dot::error;
 
 node_ptr generate_forward(const std::vector<token::group_t> &tokens);
 node_ptr generate_application(const std::vector<token::group_t> &tokens);
-node_ptr generate_function(const token::group_t &tokens);
+node_ptr generate_function(const token::group_t &tokens, const location &beginLoc);
 
 std::vector<token::group_t> generate_groups(const token::group_t &tokens, token::token_type delim = token::token_type::DOT) {
 	// stack of (), [], {}
@@ -88,7 +88,10 @@ node_ptr generate_trivial(token::ptr_t token) {
 
 }
 
-node_ptr generate_array(const token::group_t &tokens) {
+node_ptr generate_array(const token::group_t &tokens, const location &beginLoc) {
+	// an empty list []
+	if (tokens.size() == 0)
+		return std::make_shared<ArrayLiteral>(beginLoc, std::vector<node_ptr>());
 
 	std::vector<token::group_t> groups = generate_groups(tokens, token::token_type::COMMA);
 
@@ -98,8 +101,7 @@ node_ptr generate_array(const token::group_t &tokens) {
 		children.push_back(child);
 	}
 
-	// TODO: this will error if array is empty
-	return std::make_shared<ArrayLiteral>(tokens.front()->loc, children);
+	return std::make_shared<ArrayLiteral>(beginLoc, children);
 }
 
 node_ptr generate_bracketed(const token::group_t &tokens) {
@@ -158,7 +160,6 @@ node_ptr generate_bracketed(const token::group_t &tokens) {
 		}
 	}
 
-
 	// tokens left in stack at the end of parsing
 	if (!stack.empty()) {
 		token::ptr_t last = stack.back();
@@ -172,10 +173,14 @@ node_ptr generate_bracketed(const token::group_t &tokens) {
 	// remove front and back
 	token::group_t trimmed_group = token::group_t(tokens.cbegin() + 1, tokens.cend() - 1);
 
+	std::cout << "length of trimmed group = " << trimmed_group.size() << std::endl;
+	for (const auto i : trimmed_group)
+		std::cout << "\t" << i->text << std::endl;
+
 	switch (open_type) {
 		case token::token_type::OPEN_PAREN: return generate_forward(generate_groups(trimmed_group));
-		case token::token_type::OPEN_CURLY_BRACKET: return generate_function(trimmed_group);
-		case token::token_type::OPEN_SQUARE_BRACKET: return generate_array(trimmed_group);
+		case token::token_type::OPEN_CURLY_BRACKET: return generate_function(trimmed_group, tokens[0]->loc);
+		case token::token_type::OPEN_SQUARE_BRACKET: return generate_array(trimmed_group, tokens[0]->loc);
 		default: throw SyntaxError::LogicError(__FILE__, __LINE__);
 	}
 }
@@ -218,7 +223,10 @@ node_ptr generate_application(const std::vector<token::group_t> &tokens) {
 	);
 }
 
-node_ptr generate_function(const token::group_t &tokens) {
+node_ptr generate_function(const token::group_t &tokens, const location &beginLoc) {
+	// empty function {}
+	if (tokens.size() == 0) 
+		return std::make_shared<FunctionDefinition>(beginLoc, std::vector<node_ptr>());
 
 	// elements of the root
 	std::vector<node_ptr> children;
@@ -227,13 +235,19 @@ node_ptr generate_function(const token::group_t &tokens) {
 	// current group
 	token::group_t child_group;
 
+	std::cout << "length of func tokens = " << tokens.size() << std::endl;
+	for (const auto i : tokens)
+		std::cout << "\t" << i->text << std::endl;
+
 	// groups are separated by token::token_type::LINE_END unless within function
 
 	for (auto iter = tokens.cbegin(); iter != tokens.cend(); ++iter) {
-
 		// if we've reached the end of a line not in a function
 		if (((*iter)->type == token::token_type::LINE_END || (*iter)->type == token::token_type::TOKEN_END) && stack.empty()) {
 			if (child_group.size() > 0) {
+				std::cout << "length of child tokens = " << child_group.size() << std::endl;
+				for (const auto i : child_group)
+					std::cout << "\t" << i->text << std::endl;
 				children.push_back(generate_forward(generate_groups(child_group)));
 				child_group.clear();
 			}
@@ -241,12 +255,12 @@ node_ptr generate_function(const token::group_t &tokens) {
 			stack.push_back(*iter);
 			child_group.push_back(*iter);
 		} else if ((*iter)->type == token::CLOSE_CURLY_BRACKET) {
-			if (stack.empty())
-				throw SyntaxError((*iter)->loc, "unexpected }");
-			else 
-				stack.pop_back();
+			if (stack.empty()) throw SyntaxError((*iter)->loc, "unexpected }");
+	
+			stack.pop_back();
 			child_group.push_back(*iter);
 		} else {
+			std::cout << "pushed " << (*iter)->text << " to child group" << std::endl;
 			child_group.push_back(*iter);
 		}
 	}
@@ -256,7 +270,17 @@ node_ptr generate_function(const token::group_t &tokens) {
 		throw SyntaxError(last->loc, "unclosed {");
 	}
 
-	return std::make_shared<FunctionDefinition>(tokens.front()->loc, children);
+	if (child_group.size() > 0) {
+		std::cout << "length of LAST child group = " << child_group.size() << std::endl;
+		for (const auto i : child_group)
+			std::cout << "\t" << i->text << std::endl;
+		children.push_back(generate_forward(generate_groups(child_group)));
+	}
+
+	std::cout << "length of children = " << children.size() << std::endl;
+	for (const auto &i : children)
+		i->print(1);
+	return std::make_shared<FunctionDefinition>(beginLoc, children);
 }
 
 node_ptr dot::ast::generate_tree(const std::vector<token::token> &_tokens) {
@@ -265,5 +289,6 @@ node_ptr dot::ast::generate_tree(const std::vector<token::token> &_tokens) {
 	for (size_t i = 0; i < tokens.size(); ++i)
 		tokens[i] = &_tokens[i];
 
-	return generate_function(tokens);
+	// TODO: will this error if _tokens is empty?
+	return generate_function(tokens, tokens[0]->loc);
 }

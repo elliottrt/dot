@@ -1,14 +1,2 @@
 
-a.set.10
-b.set.20
-a.add.b
-
-q.set.{
-	a.add.2
-}
-a.set.(10.add.5)
-(a.b).set."Hello"
-array.set.[a, 10, "String!", [5, 20]]
-b.set.({
-	$.mul.2
-}.a)
+{$}.{5.add.$}.{$.mul.2}.10

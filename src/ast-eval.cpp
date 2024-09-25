@@ -5,7 +5,8 @@ using namespace dot;
 object_ptr ast::FunctionDefinition::call(object_ptr self, object_ptr arg, const location &loc) const {printf("in %s\n", __PRETTY_FUNCTION__);
 	(void) loc;
 
-	object_ptr last_object = nullptr;
+	// create a null, in case the function is empty
+	object_ptr last_object = std::make_shared<object>();
 
 	self->add_self_and_arg(self, arg);
 
