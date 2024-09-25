@@ -1,4 +1,2 @@
 
-array.set.[a, 10, "String!", [5, 20]]
-
-length.array
+{$}.{5.add.$}.{$.mul.2}.10

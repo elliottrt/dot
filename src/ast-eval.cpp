@@ -5,13 +5,14 @@ using namespace dot;
 object_ptr ast::FunctionDefinition::call(object_ptr self, object_ptr arg, const location &loc) const {printf("in %s\n", __PRETTY_FUNCTION__);
 	(void) loc;
 
-	object_ptr last_object = nullptr;
+	// create a null, in case the function is empty
+	object_ptr last_object = std::make_shared<object>();
 
 	self->add_self_and_arg(self, arg);
 
 	for (const node_ptr &child : children) {
 		last_object = child->evaluate(self);
-		std::cout << "completed function line, result = " << last_object->to_string() << std::endl;
+		std::cout << "\n*** completed function line, result = " << last_object->to_string() << std::endl;
 	}
 
 	self->remove_self_and_arg();
