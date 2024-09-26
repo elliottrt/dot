@@ -4,7 +4,7 @@
 
 ### General
 
-A programming language with a lot of dot syntax.
+A programming language with a lot of dot operator usage.
 Note that the dot operator is left associative, so
 `a.b.c`
 is equivalent to
