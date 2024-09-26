@@ -12,7 +12,7 @@ struct location {
 	: file(file), row(row), col(col) {}
 
 	std::string to_string() const {
-		return file + ":" + std::to_string(row) + ":" + std::to_string(col) + ":";
+		return file + ":" + std::to_string(row) + ":" + std::to_string(col);
 	}
 };
 

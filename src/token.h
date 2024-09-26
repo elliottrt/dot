@@ -9,22 +9,23 @@
 namespace dot {
 namespace token {
 
-	enum token_type {
-		TOKEN_END = 0,
-		IDENTIFIER = 'i',
-		INTEGER = '0',
-		STRING = '"',
-		DOT = '.',
-		COMMA = ',',
-		OPEN_PAREN = '(',
-		CLOSE_PAREN = ')',
-		OPEN_CURLY_BRACKET = '{',
-		CLOSE_CURLY_BRACKET = '}',
-		OPEN_SQUARE_BRACKET = '[',
-		CLOSE_SQUARE_BRACKET = ']',
-		ARGUMENT = '$',
-		SELF = '@',
-		LINE_END = '\n',
+	enum class token_type {
+		END = 0,
+		IDENTIFIER, 
+		INTEGER,
+		STRING,
+		DOT, // .
+		COMMA, // ,
+		OPEN_PAREN, // (
+		CLOSE_PAREN, // )
+		OPEN_CURLY_BRACKET, // {
+		CLOSE_CURLY_BRACKET, // }
+		OPEN_SQUARE_BRACKET, // [
+		CLOSE_SQUARE_BRACKET, // ]
+		ARGUMENT, // $
+		SELF, // @
+		LINE_END, // \n
+		TOKEN_COUNT
 	};
 
 	struct token {
@@ -35,7 +36,7 @@ namespace token {
 		token(const location &loc, token_type type, const std::string &text)
 		: type(type), text(text), loc(loc) {}
 
-		// TODO: token to string for error messages
+		std::string to_string() const;
 	};
 
 	using ptr_t = const token *;

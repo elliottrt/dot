@@ -26,8 +26,8 @@ int main(int argc, char const *argv[]) {
 	std::vector<token> tokens = dot::token::tokenize("test.dot", slurp("test.dot"));
 
 	// display all tokens read from the file
-	// for (const token &tok : tokens.ok())
-		// printf("%s:%lu:%lu: '%c' (%d): \"%s\"\n", "test.dot", tok.row, tok.col, (char) tok.type, (int) tok.type, tok.text.c_str());
+	// for (const token &tok : tokens)
+		// printf("%s\n", tok.to_string().c_str());
 
 	node_ptr ast_tree = dot::ast::generate_tree(tokens);
 

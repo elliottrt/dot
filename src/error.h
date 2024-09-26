@@ -11,7 +11,7 @@ namespace error {
 
 	struct Error : public std::runtime_error {
 		Error(const location &loc, const std::string &error_type, const std::string &message = "")
-			: std::runtime_error(loc.to_string() + " " + error_type + ": " + message) {}
+			: std::runtime_error(loc.to_string() + ": " + error_type + ": " + message) {}
 	};
 
 	struct RangeError : public Error {

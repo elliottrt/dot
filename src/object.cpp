@@ -192,13 +192,13 @@ dot::object_ptr dot::object::get(dot::object_ptr self, const std::string &name) 
 }
 
 void dot::object::add_self_and_arg(object_ptr self, object_ptr arg) {
-	child_map[std::string(1, (char) dot::token::SELF)] = self;
-	child_map[std::string(1, (char) dot::token::ARGUMENT)] = arg;
+	child_map[std::string(1, (char) dot::token::token_type::SELF)] = self;
+	child_map[std::string(1, (char) dot::token::token_type::ARGUMENT)] = arg;
 }
 
 void dot::object::remove_self_and_arg() {
-	child_map.erase(std::string(1, (char) dot::token::SELF));
-	child_map.erase(std::string(1, (char) dot::token::ARGUMENT));
+	child_map.erase(std::string(1, (char) dot::token::token_type::SELF));
+	child_map.erase(std::string(1, (char) dot::token::token_type::ARGUMENT));
 }
 
 void dot::object::set(dot::object_ptr dst, dot::object_ptr src) {

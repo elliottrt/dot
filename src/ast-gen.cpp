@@ -265,15 +265,15 @@ node_ptr generate_function(const token::group_t &tokens, const location &beginLo
 
 	for (auto iter = tokens.cbegin(); iter != tokens.cend(); ++iter) {
 		// if we've reached the end of a line not in a function
-		if (((*iter)->type == token::token_type::LINE_END || (*iter)->type == token::token_type::TOKEN_END) && stack.empty()) {
+		if (((*iter)->type == token::token_type::LINE_END || (*iter)->type == token::token_type::END) && stack.empty()) {
 			if (child_group.size() > 0) {
 				children.push_back(generate_forward(generate_groups(child_group)));
 				child_group.clear();
 			}
-		} else if ((*iter)->type == token::OPEN_CURLY_BRACKET) {
+		} else if ((*iter)->type == token::token_type::OPEN_CURLY_BRACKET) {
 			stack.push_back(*iter);
 			child_group.push_back(*iter);
-		} else if ((*iter)->type == token::CLOSE_CURLY_BRACKET) {
+		} else if ((*iter)->type == token::token_type::CLOSE_CURLY_BRACKET) {
 			if (stack.empty()) throw SyntaxError((*iter)->loc, "unexpected }");
 	
 			stack.pop_back();

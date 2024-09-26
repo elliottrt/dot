@@ -122,7 +122,29 @@ std::vector<token> dot::token::tokenize(const std::string &file, const std::stri
 		pos += token_size;
 	}
 
-	tokens.push_back(token(loc, token_type::TOKEN_END, ""));
+	tokens.push_back(token(loc, token_type::END, ""));
 	tokens.shrink_to_fit();
 	return tokens;
+}
+
+std::string dot::token::token::to_string() const {
+	static const char *TOKEN_NAMES[] = {
+		"end of input",
+		"identifier",
+		"integer literal",
+		"string literal",
+		"dot",
+		"comma",
+		"open parenthesis",
+		"close parenthesis",
+		"open brace",
+		"close brace",
+		"open bracket",
+		"close bracket",
+		"argument",
+		"self",
+		"line end"
+	};
+
+	return std::string(TOKEN_NAMES[(size_t) type]) + " at " + loc.to_string();
 }
