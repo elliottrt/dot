@@ -32,7 +32,6 @@ std::vector<token::group_t> generate_groups(const token::group_t &tokens, token:
 			stack_dirty = true;
 		// otherwise do stack operations or nothing
 		} else switch (tok->type) {
-			// TODO: if we run into one of these, and there's already stuff in the group, error
 			case token::token_type::OPEN_PAREN:
 			case token::token_type::OPEN_CURLY_BRACKET:
 			case token::token_type::OPEN_SQUARE_BRACKET:

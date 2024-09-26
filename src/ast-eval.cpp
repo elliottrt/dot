@@ -26,7 +26,7 @@ object_ptr ast::FunctionDefinition::evaluate(object_ptr parent) const {
 	(void) parent;
 
 	auto call = std::bind(&ast::FunctionDefinition::call, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
-	return object::create(callwrapper<object_ptr>(call));
+	return object::create(callwrapper<object_ptr>(call, loc));
 }
 
 object_ptr ast::ArrayLiteral::evaluate(object_ptr parent) const {
@@ -61,7 +61,6 @@ object_ptr ast::Application::evaluate(object_ptr parent) const {
 		return function(argument_obj, this->loc);
 	}
 
-	// TODO: type checking?
 	argument_obj = argument->evaluate(target_obj);
 
 	// array indexing by integers instead of `get`

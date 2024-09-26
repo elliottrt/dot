@@ -120,7 +120,7 @@ std::string dot::object::to_string() {
 			}
 			return "[" + result.substr(0, result.size() - 2) + "]";
 		}
-		case object_type::function: return "<function>";
+		case object_type::function: return value.function_value.get_source_string();
 		default: return "<null>";
 	}
 }

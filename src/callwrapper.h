@@ -6,9 +6,6 @@
 #include "location.h"
 #include "error.h"
 
-// TODO: consider source string to know where the function came from,
-// either a location or <system function>
-
 template <typename T>
 class callwrapper {
 public:
@@ -19,8 +16,12 @@ private:
 	call_type call;
 	item_type saved;
 	bool bound;
+
+	// where the function came from
+	std::string source_string;
 public:
-	callwrapper(call_type call): call(call), saved(nullptr), bound(false) {}
+	callwrapper(call_type call, const location &loc): call(call), saved(nullptr), bound(false), source_string("<function at " + loc.to_string() + ">") {}
+	callwrapper(call_type call): call(call), saved(nullptr), bound(false), source_string("<system function>") {}
 
 	void bind_to(item_type item) {
 		saved = item;
@@ -29,6 +30,10 @@ public:
 
 	bool is_bound() const {
 		return bound;
+	}
+
+	const std::string &get_source_string() const {
+		return source_string;
 	}
 
 	item_type operator()(item_type arg, const location &loc) { 
