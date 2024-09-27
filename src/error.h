@@ -6,12 +6,15 @@
 
 #include "location.h"
 
+#include <iostream>
+
 namespace dot {
 namespace error {
 
-	struct Error : public std::runtime_error {
+	struct Error : public std::exception {
+		const std::string info;
 		Error(const location &loc, const std::string &error_type, const std::string &message = "")
-			: std::runtime_error(loc.to_string() + ": " + error_type + ": " + message) {}
+			: info(loc.to_string() + ": " + error_type + ": " + message) {}
 	};
 
 	struct RangeError : public Error {

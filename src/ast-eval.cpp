@@ -96,8 +96,42 @@ object_ptr ast::IntegerLiteral::evaluate(object_ptr parent) const {
 	return object::create(value);
 }
 
+std::string::value_type unescaped_character(std::string::value_type ch, const location &loc) {
+	switch (ch) {
+		case 'n': return '\n';
+		case 'r': return '\r';
+		case 'b': return '\b';
+		case 't': return '\t';
+		case 'f': return '\f';
+		case 'v': return '\v';
+		case '"': 
+		case '\\':
+			return ch;
+		default: throw error::SyntaxError(loc, std::string("invalid escape character '") + ch + std::string("'"));
+	}
+}
+
+std::string unescape_string(const std::string &source, const location &loc) {
+	if (source.empty()) return source;
+
+	std::string result = source;
+
+	size_t pos;
+	while ((pos = result.find('\\')) != std::string::npos) {
+		if (pos == result.size() - 1)
+			throw error::SyntaxError(loc, "string ends with invalid escape character");
+
+		std::string::value_type next = result.at(pos + 1);
+
+		std::string::value_type replacement = unescaped_character(next, loc);
+		result.replace(pos, (size_t) 2, std::string(1, replacement));
+	}
+	
+	return result;
+}
+
 object_ptr ast::StringLiteral::evaluate(object_ptr parent) const {
 	DOT_PRINTF("in %s, str=%s\n", __PRETTY_FUNCTION__, string.c_str());
 	(void) parent;
-	return object::create(this->string);
+	return object::create(unescape_string(this->string, this->loc));
 }

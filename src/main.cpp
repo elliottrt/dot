@@ -22,33 +22,43 @@ int main(int argc, char const *argv[]) {
 	using namespace dot::error;
 	using namespace dot::ast;
 
+	if (argc != 2) {
+		printf("Usage:\n%s <filepath>\n", argv[0]);
+		return EXIT_FAILURE;
+	}
+
+	const std::string filepath = std::string(argv[1]);
+
 	// read all of the contents of the file and tokenize it
-	std::vector<token> tokens = dot::token::tokenize("test.dot", slurp("test.dot"));
+	std::vector<token> tokens = dot::token::tokenize(filepath, slurp(filepath));
 
 	// display all tokens read from the file
 	// for (const token &tok : tokens)
 		// printf("%s\n", tok.to_string().c_str());
 
-	node_ptr ast_tree = dot::ast::generate_tree(tokens);
+	
+	try {
+		node_ptr ast_tree = dot::ast::generate_tree(tokens);
 
-	// print the full ast tree
-	// ast_tree->print(0);
+		// print the full ast tree
+		// ast_tree->print(0);
 
-	dot::object_ptr global = dot::object::create();
+		dot::object_ptr global = dot::object::create();
 
-	dot::object_ptr main_function_obj = ast_tree->evaluate(global);
-	dot::function_type main_function = main_function_obj->get_function(ast_tree->loc);
-	main_function.bind_to(global);
+		dot::object_ptr main_function_obj = ast_tree->evaluate(global);
+		dot::function_type main_function = main_function_obj->get_function(ast_tree->loc);
+		main_function.bind_to(global);
 
-	//dot::object_ptr result = 
-	main_function(
+		main_function(
 		dot::object::from_argv(argc, argv), // argv array
 		ast_tree->loc // location of the main function
 	);
+	} catch (dot::error::Error e) {
+		printf("%s\n", e.info.c_str());
+	}
 
 	//printf("final result = %s\n", result->to_string().c_str());
 
-	printf("process exited successfully\n");
 	return EXIT_SUCCESS;
 }
 

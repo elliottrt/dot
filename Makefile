@@ -1,8 +1,9 @@
 
 TARGET=main
 SOURCE=src
+TESTS=tests
 
-#DEBUG_FLAG=-DDOT_DEBUG
+# DEBUG_FLAG=-DDOT_DEBUG
 
 CXXFLAGS=-std=c++11 -Wall -Wextra -Wpedantic -Isrc/ $(DEBUG_FLAG)
 
@@ -26,3 +27,9 @@ $(BUILD):
 clean:
 	$(RM) -f $(TARGET)
 	$(RM) -f $(SOURCE)/*.o $(SOURCE)/*.d
+
+test: ./test.py $(TESTS) $(TARGET) 
+	python3 ./test.py ./$(TARGET) ./$(TESTS)
+
+record: ./test.py $(TESTS) $(TARGET) 
+	python3 ./test.py ./$(TARGET) ./$(TESTS) -record

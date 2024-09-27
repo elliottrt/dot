@@ -41,7 +41,7 @@
 		- [ ] trig functions - Math.Sin.x? Math.Cos.x?
 		- [x] simple math functions
 		- [ ] bitwise math functions
-		- [ ] logical math functions
+		- [x] logical math functions
 		- [ ] double type - how? 10.0 would be interpreted as 10 applied to 0
 	- [x] control flow
 		- [x] if
@@ -52,6 +52,7 @@
 		- note: something like `a.exists."b"`
 
 - Other
+	- [ ] testing functionality
 	- [ ] proper command line interface
 	- [ ] read-eval-print loop interactive prompt
 	- [ ] the system functions should have short definitions in the maps so documentation can be generated
