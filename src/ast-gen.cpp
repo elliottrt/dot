@@ -105,7 +105,11 @@ std::string unescape_string(const std::string &source, const location &loc) {
 	return result;
 }
 
-node_ptr generate_trivial(token::ptr_t token) {
+node_ptr generate_trivial(const token::group_t &group) {
+	const token::ptr_t &token = group.front();
+
+	if (group.size() > 1)
+		throw SyntaxError(group[1]->loc, "unexpected " + group[1]->text);
 
 	switch (token->type) {
 		case token::token_type::IDENTIFIER:
@@ -217,9 +221,20 @@ node_ptr generate_forward(const std::vector<token::group_t> &tokens) {
 	if (tokens.size() == 1) {
 		const token::group_t &group = tokens.front();
 
-		if (group.size() == 1)
-			return generate_trivial(group.front());
-		else 
+		if (group.empty())
+			throw SyntaxError::LogicError(__FILE__, __LINE__);
+
+		const token::token_type &first_type = group.front()->type;
+
+		if (
+			first_type == token::token_type::IDENTIFIER ||
+			first_type == token::token_type::ARGUMENT ||
+			first_type == token::token_type::SELF ||
+			first_type == token::token_type::INTEGER ||
+			first_type == token::token_type::STRING
+		)
+			return generate_trivial(group);
+		else
 			return generate_bracketed(group);
 	}
 
