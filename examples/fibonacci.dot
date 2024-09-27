@@ -8,9 +8,9 @@ fib.while.{
 	print.(@.a)
 	print."\n"
 
-	temp.set.a
-	a.add.b
-	b.add.temp
+	temp.set.b
+	b.add.a
+	a.set.temp
 
 	@.sub.1
 }

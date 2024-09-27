@@ -31,10 +31,11 @@
 		- [ ] insert
 		- [x] remove
 		- [x] length
+		- [ ] figure out more operators
 		- note: other functions may be implemented using these
 	- [ ] string operators
 		- [x] length
-		- note: need more
+		- [ ] figure out more operators
 	- [x] general set method
 	- [ ] math functions
 		- [ ] trig functions - Math.Sin.x? Math.Cos.x?

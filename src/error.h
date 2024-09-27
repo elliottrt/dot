@@ -38,6 +38,11 @@ namespace error {
 			: Error(loc, "bind error", "function was not bound to object") {}
 	};
 
+	struct DivisonByZeroError : public Error {
+		DivisonByZeroError(const location &loc)
+			: Error(loc, "division by zero error", "divison by zero") {}
+	};
+
 }
 }
 

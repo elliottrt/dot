@@ -33,6 +33,9 @@ DOT_DECLARE(dot_div) {
 	integer_type &self_int = self->get_int(loc);
 	integer_type &arg_int = arg->get_int(loc);
 
+	if (arg_int == 0)
+		throw error::DivisonByZeroError(loc);
+
 	self_int /= arg_int;
 
 	return self;
@@ -41,6 +44,9 @@ DOT_DECLARE(dot_div) {
 DOT_DECLARE(dot_mod) {
 	integer_type &self_int = self->get_int(loc);
 	integer_type &arg_int = arg->get_int(loc);
+
+	if (arg_int == 0)
+		throw error::DivisonByZeroError(loc);
 
 	self_int %= arg_int;
 
@@ -98,6 +104,28 @@ DOT_DECLARE(dot_while) {
 	return self;
 }
 
+DOT_DECLARE(dot_bool_not) {
+	(void) self;
+
+	integer_type &value = arg->get_int(loc);
+
+	return dot::object::create(!value);
+}
+
+DOT_DECLARE(dot_bool_and) {
+	integer_type &self_int = self->get_int(loc);
+	integer_type &arg_int = arg->get_int(loc);
+
+	return dot::object::create(self_int && arg_int);
+}
+
+DOT_DECLARE(dot_bool_or) {
+	integer_type &self_int = self->get_int(loc);
+	integer_type &arg_int = arg->get_int(loc);
+
+	return dot::object::create(self_int || arg_int);
+}
+
 builtins::builtin_list_type builtins::INTEGER_FUNCTIONS = {
 	{"add", dot_add},
 	{"sub", dot_sub},
@@ -106,5 +134,8 @@ builtins::builtin_list_type builtins::INTEGER_FUNCTIONS = {
 	{"mod", dot_mod},
 	{"if", dot_if},
 	{"else", dot_else},
-	{"while", dot_while}
+	{"while", dot_while},
+	{"not", dot_bool_not},
+	{"and", dot_bool_and},
+	{"or", dot_bool_or}
 };
