@@ -1,0 +1,14 @@
+
+a.set.[]
+
+print.(length.a).print."\n"
+
+a.push.100
+
+print.a.print."\n"
+
+print.(length.a).print."\n"
+
+a.push.[100, "String", [], {print.$}]
+
+print.a.print."\n"

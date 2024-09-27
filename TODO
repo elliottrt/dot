@@ -52,13 +52,12 @@
 		- note: something like `a.exists."b"`
 
 - Other
-	- [ ] testing functionality
-	- [ ] proper command line interface
+	- [x] testing
+	- [x] proper command line interface
 	- [ ] read-eval-print loop interactive prompt
 	- [ ] the system functions should have short definitions in the maps so documentation can be generated
 	- [ ] do something about circular references with lists and objects
 	- [ ] static typing/inferring - interfaces?
-	- [ ] testing
 	- [ ] function application - when a function is passed to a function, we could return a thunk
 		- note: thunk would wait until given argument, then evaluate - would allow function composition
 	- [ ] ability to import/include files
@@ -70,4 +69,3 @@
 	- [ ] reporting of multiple errors
 	- [ ] simplify ast tree
 		- [ ] simplify should identify constants		 ex: (10.add.5) -> 15
-	- [ ] array elements separated by `.`?
