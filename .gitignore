@@ -4,6 +4,3 @@
 main
 src/*.o
 src/*.d
-
-*.dot
-~tests/*.dot
