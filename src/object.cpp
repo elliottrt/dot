@@ -203,5 +203,6 @@ void dot::object::remove_self_and_arg() {
 
 void dot::object::set(dot::object_ptr dst, dot::object_ptr src) {
 	dst->value = src->value;
+	// TODO: this overwrites all children. is this desirable?
 	dst->child_map = src->child_map;
 }

@@ -1,4 +1,8 @@
 
+- Bugs
+	- [ ] interpreter does not error when input file not accessible
+	- [ ] arrays cannot have integer children - it tries to index the array by their value instead of accessing them
+
 - Basic
 	- [x] basic object structure
 	- [x] errors and results

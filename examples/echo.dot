@@ -1,0 +1,13 @@
+
+$.remove.0
+
+c.set.(length.$)
+c.args.set.$
+
+c.while.{
+	print.(@.args.0).print." "
+	@.args.remove.0
+	@.sub.1
+}
+
+print."\n"
