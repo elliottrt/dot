@@ -17,9 +17,9 @@ namespace error {
 			: info(loc.to_string() + ": " + error_type + ": " + message) {}
 	};
 
-	struct RangeError : public Error {
-		RangeError(const location &loc, const ssize_t &requested, const ssize_t &max)
-			: Error(loc, "range error", std::to_string(requested) + " out of bounds, max is " + std::to_string(max)) {}
+	struct ArrayRangeError : public Error {
+		ArrayRangeError(const location &loc, const ssize_t &requested, const ssize_t &max)
+			: Error(loc, "range error", std::to_string(requested) + " out of bounds for array of size " + std::to_string(max)) {}
 	};
 
 	struct SyntaxError : public Error {

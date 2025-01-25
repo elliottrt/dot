@@ -7,7 +7,7 @@ DOT_DECLARE(dot_get) {
 	integer_type &index = arg->get_int(loc);
 
 	if (index < 0 || index >= (ssize_t) array.size())
-		throw error::RangeError(loc, index, array.size() - 1);
+		throw error::ArrayRangeError(loc, index, array.size());
 
 	return array[index];
 }
@@ -23,7 +23,7 @@ DOT_DECLARE(dot_remove) {
 	integer_type &index = arg->get_int(loc);
 
 	if (index < 0 || index >= (ssize_t) array.size())
-		throw error::RangeError(loc, index, array.size() - 1);
+		throw error::ArrayRangeError(loc, index, array.size());
 
 	object_ptr removed_value = array[index];
 

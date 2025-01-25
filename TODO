@@ -2,6 +2,7 @@
 - Basic
 	- [x] basic object structure
 	- [x] errors and results
+	- [ ] comments
 
 - AST
 	- [x] tree generation from text
@@ -18,6 +19,7 @@
 	- [x] argument ($) at the top level should be argv
 		- [x] excess arguments to ./dot <filename> ... should be passed to argv
 	- [ ] type errors should specify which argument caused the type error
+	- [ ] way of accessing variables that exist outside a function - ability to access upper scopes
 
 - Builtin functions, when possible, should be member functions of variables - will allow for polymorphism
 	- [ ] input/output

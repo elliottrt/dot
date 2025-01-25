@@ -69,7 +69,7 @@ object_ptr ast::Application::evaluate(object_ptr parent) const {
 		integer_type &index = argument_obj->get_int(loc);
 
 		if (index < 0 || index >= (ssize_t) array.size())
-			throw error::RangeError(loc, index, array.size() - 1);
+			throw error::ArrayRangeError(loc, index, array.size());
 
 		return array[index];
 	}

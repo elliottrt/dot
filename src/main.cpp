@@ -50,9 +50,9 @@ int main(int argc, char const *argv[]) {
 		main_function.bind_to(global);
 
 		main_function(
-		dot::object::from_argv(argc, argv), // argv array
-		ast_tree->loc // location of the main function
-	);
+			dot::object::from_argv(argc - 1, argv + 1), // argv array excluding the name of the interpreter
+			ast_tree->loc // location of the main function
+		);
 	} catch (dot::error::Error e) {
 		printf("%s\n", e.info.c_str());
 	}
