@@ -1,6 +1,11 @@
+# IDE and System
 .vscode/
 .DS_Store
 
+# Compilation Outputs
 main
 src/*.o
 src/*.d
+
+# Test Script
+test.py

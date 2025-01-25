@@ -1,1 +1,5 @@
-StRi"ng1234<system function>[<null>, []]
+{
+    "stdout": "StRi\"ng1234<system function>[<null>, []]", 
+    "stderr": "", 
+    "returncode": 0
+}

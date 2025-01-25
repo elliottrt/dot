@@ -1,4 +1,5 @@
-0
-[100]
-1
-[100, [100, String, [], <function at ./tests/arrays.dot:12:28>]]
+{
+    "stdout": "0\n[100]\n1\n[100, [100, String, [], <function at tests/arrays.dot:12:28>]]\n", 
+    "stderr": "", 
+    "returncode": 0
+}

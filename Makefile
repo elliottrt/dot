@@ -1,17 +1,17 @@
 
-TARGET=main
+TARGET=dot
 SOURCE=src
 TESTS=tests
 
 # DEBUG_FLAG=-DDOT_DEBUG
 
-CXXFLAGS=-std=c++11 -Wall -Wextra -Wpedantic -Isrc/ $(DEBUG_FLAG)
+CXXFLAGS=-std=c++11 -Wall -Wextra -Wpedantic -I$(SOURCE) $(DEBUG_FLAG)
 
 CXXSRC=$(wildcard $(SOURCE)/*.cpp)
 CXXOBJ=$(CXXSRC:.cpp=.o)
 CXXDEP=$(CXXSRC:.cpp=.d)
 
-all: main
+all: $(TARGET)
 
 -include $(CXXDEP)
 
@@ -25,11 +25,11 @@ $(BUILD):
 	mkdir -p $(BUILD)
 
 clean:
-	$(RM) -f $(TARGET)
-	$(RM) -f $(SOURCE)/*.o $(SOURCE)/*.d
+	$(RM) $(TARGET)
+	$(RM) $(SOURCE)/*.o $(SOURCE)/*.d
 
 test: ./test.py $(TESTS) $(TARGET) 
 	python3 ./test.py ./$(TARGET) ./$(TESTS)
 
-record: ./test.py $(TESTS) $(TARGET) 
-	python3 ./test.py ./$(TARGET) ./$(TESTS) -record
+update: ./test.py $(TARGET) 
+	python3 ./test.py ./$(TARGET) $(TESTS) -u
