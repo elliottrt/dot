@@ -57,9 +57,9 @@ DOT_DECLARE(dot_if) {
 	integer_type &cond = self->get_int(loc);
 	function_type &then = arg->get_function(loc);
 
-	bool is_true = cond != 0;
+	bool cond_true = cond != 0;
 
-	if (is_true) {
+	if (cond_true) {
 		object_ptr then_self = std::make_shared<object>();
 		object_ptr then_arg = std::make_shared<object>();
 
@@ -74,9 +74,9 @@ DOT_DECLARE(dot_else) {
 	integer_type &cond = self->get_int(loc);
 	function_type &then = arg->get_function(loc);
 
-	bool is_true = cond != 0;
+	bool cond_true = cond != 0;
 
-	if (is_true == false) {
+	if (!cond_true) {
 		object_ptr then_self = std::make_shared<object>();
 		object_ptr then_arg = std::make_shared<object>();
 

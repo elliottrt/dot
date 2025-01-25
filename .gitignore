@@ -4,6 +4,7 @@
 
 # Compilation Outputs
 main
+dot
 src/*.o
 src/*.d
 

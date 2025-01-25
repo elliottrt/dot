@@ -16,11 +16,15 @@
 		- [x] @ for self and $ for argument
 	- [x] ability to initialize variables to null
 	- [x] argument ($) at the top level should be argv
+		- [x] excess arguments to ./dot <filename> ... should be passed to argv
 	- [ ] type errors should specify which argument caused the type error
 
 - Builtin functions, when possible, should be member functions of variables - will allow for polymorphism
 	- [ ] input/output
 		- [x] print
+			- [ ] println
+		- [ ] readchar
+		- [ ] readline
 	- [ ] equality
 	- [ ] array operators 
 		- [x] get element

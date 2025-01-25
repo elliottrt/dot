@@ -22,8 +22,8 @@ int main(int argc, char const *argv[]) {
 	using namespace dot::error;
 	using namespace dot::ast;
 
-	if (argc != 2) {
-		printf("Usage:\n%s <filepath>\n", argv[0]);
+	if (argc < 2) {
+		printf("Usage:\n%s <filepath> [dot program arguments]\n", argv[0]);
 		return EXIT_FAILURE;
 	}
 

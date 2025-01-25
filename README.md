@@ -2,15 +2,13 @@
 
 ## Description
 
-### General
-
 A programming language with a lot of dot operator usage.
 Note that the dot operator is left associative, so
 `a.b.c`
 is equivalent to
 `(a.b).c`
 
-### Variables
+## Variables
 Like Python, variables are created simply by using giving them a name. They begin with null values, which may be changed using the `set` function:  
 For example, `a.set.10` creates a null-valued variable named `a`, finds the system function called `set`, and calls `set` with caller = `a` and argument = `10`, setting `a` to the integer `10`.
 
@@ -31,24 +29,40 @@ Function Definitions are enclosed in curly brackets and contain 0 or more lines 
 }
 ```
 
-### Data Types
-#### null
+## Data Types
+### null
  - has no inherent value
  - has attributes
-#### integer
+### integer
  - inherent value: integer
  - has attributes
-#### string
+### string
  - inherent value: string
  - has attributes
-#### array
+### array
  - inherent value: array of objects
  - may be indexed by integer literals (`array.4`) or with the `get` function, which also accepts integer variables and expressions (`array.get.(4.add.2)`)
- - setting elements may be done by calling the `set` function on an element like so: `array.get.<index>.set.<new value>`
+ - setting elements may be done by calling the `set` function on an element like so: `array.get.<index>.set.<new value>` or by indexing via integer literals `array.<index>.set.<new value>`
  - has attributes
-#### function
+### function
  - inherent value: a function
  - does NOT have attributes
  - is always called with two arguments: caller (represented by `@`) and argument (represented by `$`)
 	- it is possible for the caller to be left out, in which case it is a new null object
  - functions are called like so: `<caller>.<function>.<argument>`
+
+## Control Flow
+### If
+ - member function of integers
+ - executes the function passed as an argument if the integer is nonzero
+ - returns the integer, allowing it to be chained with else
+  - `<integer>.if.{ ... }`
+### Else
+ - member function of integers
+ - executes the function passed as an argument if the integer is zero
+ - `<integer>.else.{ ... }`
+### While
+ - member function of integers
+ - executes the function passed as an argument while the integer is nonzero
+	- the self variable '@' references the integer, and may be updated in the loop
+ - `<integer>.while.{ ... }`
