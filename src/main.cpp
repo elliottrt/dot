@@ -10,7 +10,12 @@
 
 // from https://stackoverflow.com/questions/116038/how-do-i-read-an-entire-file-into-a-stdstring-in-c
 std::string slurp(const std::string &path) {
+
 	std::ifstream f = std::ifstream(path);
+
+	if (!f.is_open())
+		throw dot::error::OsError("unable to open file " + path);
+
     std::ostringstream sstr;
     sstr << f.rdbuf();
     return sstr.str();
@@ -23,21 +28,22 @@ int main(int argc, char const *argv[]) {
 	using namespace dot::ast;
 
 	if (argc < 2) {
-		printf("Usage:\n%s <filepath> [dot program arguments]\n", argv[0]);
+		printf("Usage: %s <filepath> [dot program arguments]\n", argv[0]);
 		return EXIT_FAILURE;
 	}
 
 	const std::string filepath = std::string(argv[1]);
 
-	// read all of the contents of the file and tokenize it
-	std::vector<token> tokens = dot::token::tokenize(filepath, slurp(filepath));
-
-	// display all tokens read from the file
-	// for (const token &tok : tokens)
-		// printf("%s\n", tok.to_string().c_str());
-
 	
 	try {
+
+		// read all of the contents of the file and tokenize it
+		std::vector<token> tokens = dot::token::tokenize(filepath, slurp(filepath));
+
+		// display all tokens read from the file
+		// for (const token &tok : tokens)
+		// printf("%s\n", tok.to_string().c_str());
+
 		node_ptr ast_tree = dot::ast::generate_tree(tokens);
 
 		// print the full ast tree
@@ -53,8 +59,9 @@ int main(int argc, char const *argv[]) {
 			dot::object::from_argv(argc - 1, argv + 1), // argv array excluding the name of the interpreter
 			ast_tree->loc // location of the main function
 		);
+
 	} catch (dot::error::Error e) {
-		printf("%s\n", e.info.c_str());
+		fprintf(stderr, "%s\n", e.info.c_str());
 	}
 
 	//printf("final result = %s\n", result->to_string().c_str());

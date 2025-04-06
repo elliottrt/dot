@@ -30,6 +30,16 @@ DOT_DECLARE(dot_print) {
 	return arg;
 }
 
+DOT_DECLARE(dot_println) {
+	(void) self;
+	(void) loc;
+
+	fputs(arg->to_string().c_str(), stdout);
+	fputc('\n', stdout);
+
+	return arg;
+}
+
 DOT_DECLARE(dot_bool_not) {
 	(void) self;
 
@@ -44,5 +54,6 @@ builtins::builtin_list_type builtins::OBJECT_FUNCTIONS = {
 	{"set", dot_set},
 	{"length", dot_length},
 	{"print", dot_print},
+	{"println", dot_println},
 	{"not", dot_bool_not}
 };

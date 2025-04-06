@@ -2,7 +2,7 @@
 value.set.0
 
 value.while.{
-	print."1\n"
+	println."1"
 }.else.{
-	print."0\n"
+	println."0"
 }

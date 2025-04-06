@@ -15,6 +15,13 @@ namespace error {
 		const std::string info;
 		Error(const location &loc, const std::string &error_type, const std::string &message = "")
 			: info(loc.to_string() + ": " + error_type + ": " + message) {}
+		Error(const std::string &error_type, const std::string &message = "")
+			: info(error_type + ": " + message) {}
+	};
+
+	struct OsError : public Error {
+		OsError(const std::string &message = "os error")
+			: Error(message, strerror(errno)) {}
 	};
 
 	struct ArrayRangeError : public Error {

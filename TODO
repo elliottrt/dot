@@ -1,6 +1,5 @@
 
 - Bugs
-	- [ ] interpreter does not error when input file not accessible
 	- [ ] arrays cannot have integer children - it tries to index the array by their value instead of accessing them
 
 - Basic
@@ -28,7 +27,7 @@
 - Builtin functions, when possible, should be member functions of variables - will allow for polymorphism
 	- [ ] input/output
 		- [x] print
-			- [ ] println
+			- [x] println
 		- [ ] readchar
 		- [ ] readline
 	- [ ] equality

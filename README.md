@@ -9,8 +9,7 @@ is equivalent to
 `(a.b).c`
 
 ## Variables
-Like Python, variables are created simply by using giving them a name. They begin with null values, which may be changed using the `set` function:  
-For example, `a.set.10` creates a null-valued variable named `a`, finds the system function called `set`, and calls `set` with caller = `a` and argument = `10`, setting `a` to the integer `10`.
+Like Python, variables are created simply by using giving them a name. They begin with null values, which may be changed using the `set` function. For example, `a.set.10` creates a null-valued variable named `a`, finds the system function called `set`, and calls `set` with caller = `a` and argument = `10`, setting `a` to the integer `10`.
 
 Integer literals are represented in decimal and may be negative:  ```0```, ```10000```, ```-434234```, ```3``` etc.
 

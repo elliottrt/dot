@@ -5,8 +5,7 @@ fib.a.set.0
 fib.b.set.1
 
 fib.while.{
-	print.(@.a)
-	print."\n"
+	println.(@.a)
 
 	temp.set.b
 	b.add.a

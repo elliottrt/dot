@@ -1,11 +1,12 @@
 
 TARGET=dot
 SOURCE=src
+INCLUDE=include
 TESTS=tests examples
 
 # DEBUG_FLAG=-DDOT_DEBUG
 
-CXXFLAGS=-std=c++11 -Wall -Wextra -Wpedantic -I$(SOURCE) $(DEBUG_FLAG)
+CXXFLAGS=-std=c++11 -Wall -Wextra -Wpedantic -I$(INCLUDE) $(DEBUG_FLAG)
 
 CXXSRC=$(wildcard $(SOURCE)/*.cpp)
 CXXOBJ=$(CXXSRC:.cpp=.o)
