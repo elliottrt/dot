@@ -1,12 +1,11 @@
 # IDE and System
 .vscode/
 .DS_Store
+.cache
 
 # Compilation Outputs
-main
 dot
-src/*.o
-src/*.d
+build/
 
 # Test Script
 test.py
